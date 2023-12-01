@@ -5,7 +5,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,14 +20,27 @@ import java.util.ResourceBundle;
 
 public class NewSongWinController implements Initializable {
     @FXML
-    public ListView<String> songListView;
+    private TextField titleTextfield;
+
+    @FXML
+    private TextField artistTextfield;
+    @FXML
+    private TextField timeTextfield;
+    @FXML
+    private ListView<String> songListView;
+
+    @FXML
+    private ChoiceBox<String> genreChoicebox;
 
     public void start(Stage newSongWindow){
         newSongWindow.setTitle("New/Edit Song");
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ObservableList<String> genres = FXCollections.observableArrayList("Pop", "Rock","Country","Hip Hop");
+        genreChoicebox.setItems(genres);
 
+        genreChoicebox.setValue("Funky Chicken dance?");
     }
     public void chooseSongbtn(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
@@ -47,6 +62,20 @@ public class NewSongWinController implements Initializable {
 
     public void setSongListView(ListView<String> songListView) {
         this.songListView = songListView;
+    }
+    public void saveSongInfo(){
+        String title = titleTextfield.getText();
+        String artist = artistTextfield.getText();
+        int time = Integer.parseInt(timeTextfield.getText());
+        String genre = genreChoicebox.getValue();
+
+        String songInfo = String.format("%s - %s- %s - (%d sec)", title, artist, genre, time);
+        songListView.getItems().add(songInfo);
+
+        titleTextfield.clear();
+        artistTextfield.clear();
+        timeTextfield.clear();
+
     }
 }
 
