@@ -1,31 +1,33 @@
 package be;
 
 public class Song {
-<<<<<<< HEAD
-    private int ID = -1;
+    private int id;
     private String title;
-=======
-    private int id = -1;
-    private String name;
->>>>>>> e5e3e6370da4e38a8c61da3f9c87ac183c29ea0a
     private String artist;
+    private String genre;
     private String filePath;
+    private String time;
 
-    public Song(String title, String artist, String genre, int time, String filePath) {
-        this.title=title;
-        this.artist=artist;
-        this.filePath=filePath;
+    public Song(int id, String title, String artist, String genre, String filePath, String time) {
+        this.id = id;
+        this.title = title;
+        this.artist = artist;
+        this.genre = genre;
+        this.filePath = filePath;
+        this.time = time;
     }
 
-    public Song (int id , String name, String artist, String filePath) {
-        this.id= id;
-        this.name= name;
-        this.artist= artist;
-        this.filePath= filePath;
-
+    public Song(String title, String artist, String genre, String filePath, String time) {
+        this.title = title;
+        this.artist = artist;
+        this.genre = genre;
+        this.filePath = filePath;
+        this.time = time;
     }
 
+    public Song() {
 
+    }
 
     public int getId() {
         return id;
@@ -35,11 +37,11 @@ public class Song {
         this.id = id;
     }
 
-    public String getName() {
+    public String getTitle() {
         return title;
     }
 
-    public void setName(String name) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -51,6 +53,14 @@ public class Song {
         this.artist = artist;
     }
 
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
     public String getFilePath() {
         return filePath;
     }
@@ -58,16 +68,12 @@ public class Song {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-<<<<<<< HEAD
-=======
-    @Override
-    public String toString (){
-        return "Song=" +
-                "id= " + id +
-                "name= " + name +
-                "artist= " + artist +
-                "file path= " + filePath ;
+
+    public String getTime() {
+        return time;
     }
 
->>>>>>> e5e3e6370da4e38a8c61da3f9c87ac183c29ea0a
+    public void setTime(String time) {
+        this.time = time;
+    }
 }

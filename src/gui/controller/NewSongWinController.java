@@ -56,7 +56,7 @@ public class NewSongWinController implements Initializable {
     private void loadSongs(List<File> songFiles) {
 
         for (File file : songFiles) {
-            Song newSong = new Song(file.getName(), "", "", 0, "");
+            Song newSong = new Song();
             newSong.setFilePath(file.getAbsolutePath());
             model.addSong(newSong);
         }
@@ -70,11 +70,11 @@ public class NewSongWinController implements Initializable {
     public void saveSongInfo(){
         String title = titleTextfield.getText();
         String artist = artistTextfield.getText();
-        int time = Integer.parseInt(timeTextfield.getText());
+        String time = timeTextfield.getText();
         String genre = genreChoicebox.getValue();
 
         //String songInfo = String.format("%s - %s- %s - (%d sec)", title, artist, genre, time);
-        Song newSong = new Song(title, artist, genre, time, filePath);
+        Song newSong = new Song(title, artist, genre, filePath, time);
         model.addSong(newSong);
         titleTextfield.clear();
         artistTextfield.clear();

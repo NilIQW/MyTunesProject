@@ -1,4 +1,4 @@
-/*package dal;
+package dal;
 
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
@@ -29,8 +29,8 @@ public class ConnectionManager {
         /*ConnectionManager databaseConnection = new ConnectionManager();
         Connection connection = databaseConnection.getConnection();
         System.out.println("Yaaay!");
-        connection.close();
+        connection.close();*/
 
 
     }
-}*/
+}
