@@ -1,7 +1,10 @@
 package gui.controller;
 
 import be.Song;
+<<<<<<< HEAD
 import gui.MyTunesModel;
+=======
+>>>>>>> e5e3e6370da4e38a8c61da3f9c87ac183c29ea0a
 import gui.view.NewPlaylist;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,19 +14,28 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+<<<<<<< HEAD
 import java.io.File;
+=======
+
+>>>>>>> e5e3e6370da4e38a8c61da3f9c87ac183c29ea0a
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
 public class MyTunesController implements Initializable {
+
+    public Song song;
+
     @FXML
+<<<<<<< HEAD
     public ListView<Song> songListView;
 
     private MyTunesModel model;
@@ -35,6 +47,22 @@ public class MyTunesController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ObservableList<Song> songs = FXCollections.observableArrayList();
+=======
+    public ListView<String> songListView;
+    public Button newPlaylist;
+    public Button editPlaylist;
+    public Button deletePlaylist;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        song = new Song(1, "song1", "shehshe", "media/BEAUZ&MOMO-Won'tLookBack[NCS Release].mp3");
+        song.toString();
+        System.out.println(song);
+
+        ObservableList<String> songs = FXCollections.observableArrayList(
+                "");
+        MyTunesController myTunesController = new MyTunesController();
+>>>>>>> e5e3e6370da4e38a8c61da3f9c87ac183c29ea0a
         songListView.setItems(songs);
 
         if (model != null) {
