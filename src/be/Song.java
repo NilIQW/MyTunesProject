@@ -2,10 +2,15 @@ package be;
 
 public class Song {
     private int ID = -1;
-    private String name;
+    private String title;
     private String artist;
     private String filePath;
 
+    public Song(String title, String artist, String genre, int time, String filePath) {
+        this.title=title;
+        this.artist=artist;
+        this.filePath=filePath;
+    }
 
     public int getID() {
         return ID;
@@ -16,11 +21,11 @@ public class Song {
     }
 
     public String getName() {
-        return name;
+        return title;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.title = title;
     }
 
     public String getArtist() {
@@ -29,5 +34,13 @@ public class Song {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
