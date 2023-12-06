@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NewSongWinController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NewSongWinController">
     <children>
         <AnchorPane prefHeight="400.0" prefWidth="601.0" style="-fx-background-color: #C9BFE5;">
             <children>
@@ -21,6 +21,7 @@
                 <TextField layoutX="203.0" layoutY="283.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #E5DFF6;" />
                 <Button fx:id="chooseSong" layoutX="434.0" layoutY="282.0" mnemonicParsing="false" onAction="#chooseSongbtn" style="-fx-background-color: #E5DFF6;" text="Choose..." />
             <ChoiceBox fx:id="genreChoicebox" layoutX="203.0" layoutY="200.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #E5DFF6;" />
+            <Button fx:id="doneBtn" layoutX="434.0" layoutY="345.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#done" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #E5DFF6;" text="Done" />
             </children>
         </AnchorPane>
     </children>

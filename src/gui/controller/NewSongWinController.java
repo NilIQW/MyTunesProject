@@ -8,10 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
@@ -27,16 +25,22 @@ public class NewSongWinController implements Initializable {
     @FXML
     private TextField timeTextfield;
     @FXML
-    private ListView<Song> songListView;
+    private TableView<Song> songTableView;
+    private MyTunesController myTunesController;
 
     @FXML
     private ChoiceBox<String> genreChoicebox;
     private String filePath = "media";
-
     private MyTunesModel model;
+    private Stage newSongWindow;
 
+
+    public void setMyTunesController(MyTunesController myTunesController) {
+        this.myTunesController = myTunesController;
+    }
 
     public void start(Stage newSongWindow){
+        this.newSongWindow=newSongWindow;
         newSongWindow.setTitle("New/Edit Song");
     }
     @Override
@@ -44,41 +48,47 @@ public class NewSongWinController implements Initializable {
         populateChoicebox();
     }
     public void chooseSongbtn(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose songs");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Music Files","*.mp3", "*.wav"));
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(songListView.getScene().getWindow());
+        if(songTableView !=null) {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Choose songs");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Music Files", "*.mp3", "*.wav"));
+            List<File> selectedFiles = fileChooser.showOpenMultipleDialog(songTableView.getScene().getWindow());
 
-        if(selectedFiles!=null){
-            loadSongs(selectedFiles);
+            if (selectedFiles != null) {
+                loadSongs(selectedFiles);
+            }
+            MyTunesController myTunesController = new MyTunesController();
+            if (myTunesController != null) {
+                myTunesController.playSelectedSong();//problem??
+            }
         }
     }
     private void loadSongs(List<File> songFiles) {
-
-        for (File file : songFiles) {
-            Song newSong = new Song(file.getName(), "", "", 0, "");
-            newSong.setFilePath(file.getAbsolutePath());
-            model.addSong(newSong);
+        if(model != null) {
+            for (File file : songFiles) {
+                Song newSong = new Song(file.getName(), "", "", 0, "");
+                newSong.setFilePath(file.getAbsolutePath());
+                model.addSong(newSong);
+            }
+            ObservableList<Song> updatedSongs =FXCollections.observableArrayList(model.getSongs());
+            songTableView.setItems(updatedSongs);
         }
-        songListView.setItems(FXCollections.observableArrayList(model.getSongs()));
-
     }
 
-    public void setSongListView(ListView<Song> songListView) {
-        this.songListView = songListView;
+    public void setSongTableView(TableView<Song> songTableView) {
+        this.songTableView = songTableView;
     }
     public void saveSongInfo(){
         String title = titleTextfield.getText();
         String artist = artistTextfield.getText();
         int time = Integer.parseInt(timeTextfield.getText());
         String genre = genreChoicebox.getValue();
-
-        //String songInfo = String.format("%s - %s- %s - (%d sec)", title, artist, genre, time);
         Song newSong = new Song(title, artist, genre, time, filePath);
         model.addSong(newSong);
         titleTextfield.clear();
         artistTextfield.clear();
         timeTextfield.clear();
+        newSongWindow.close();
 
     }
 
@@ -89,10 +99,12 @@ public class NewSongWinController implements Initializable {
     public void populateChoicebox(){
         ObservableList<String> genres = FXCollections.observableArrayList("Pop", "Rock","Country","Hip Hop");
         genreChoicebox.setItems(genres);
-        genreChoicebox.setValue("Funky Chicken dance?");
+        genreChoicebox.setValue("Pop");
     }
 
 
+    public void done(ActionEvent actionEvent) {
 
+    }
 }
 

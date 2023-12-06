@@ -1,5 +1,9 @@
 package be;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+
 public class Song {
     private int ID = -1;
     private String title;
@@ -42,5 +46,15 @@ public class Song {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public StringProperty titleProperty() {
+        return new SimpleStringProperty();
+    }
+    public StringProperty artistProperty() {
+        return new SimpleStringProperty();
+    }
+    public StringProperty genreProperty() {
+        return new SimpleStringProperty();
     }
 }

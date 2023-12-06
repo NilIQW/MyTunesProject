@@ -11,7 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -24,26 +25,41 @@ import java.util.ResourceBundle;
 
 public class MyTunesController implements Initializable {
     @FXML
-    public ListView<Song> songListView;
-
+    public TableView<Song> songTableView;
+    @FXML
+    public TableColumn<Song, String> titleColumn;
+    @FXML
+    public TableColumn<Song, String> artistColumn;
+    @FXML
+    public TableColumn<Song, String> genreColumn;
     private MyTunesModel model;
+
+    private MediaPlayer mediaPlayer;
 
     public void setModel(MyTunesModel model){
         this.model = model;
     }
-
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("My Tunes");
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
+        genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());;
         ObservableList<Song> songs = FXCollections.observableArrayList();
-        songListView.setItems(songs);
+        songTableView.setItems(songs);
 
         if (model != null) {
             songs.addAll(model.getSongs());
         }
+        /*songTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldSong, newSong) -> {
+            if (newSong != null) {
+                playSelectedSong();
+            }
+        });*/
     }
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("My Tunes");
-    }
+
     public void newPlaylist(ActionEvent actionEvent) {
         NewPlaylist.display();
     }
@@ -57,8 +73,9 @@ public class MyTunesController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newSongWin.fxml"));
             Parent root = loader.load();
             NewSongWinController newSongWinController = loader.getController();
-            newSongWinController.setSongListView(songListView);
+            newSongWinController.setSongTableView(songTableView);
             newSongWinController.setMyTunesModel(model);
+            newSongWinController.setMyTunesController(this);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
@@ -67,22 +84,16 @@ public class MyTunesController implements Initializable {
         }
     }
     public void playSelectedSong(){
-        Song selectedSong = songListView.getSelectionModel().getSelectedItem();
+        Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
         if(selectedSong!=null && selectedSong.getFilePath() != null && !selectedSong.getFilePath().isEmpty()){
             String filePath = selectedSong.getFilePath();
             Media media = new Media(new File(filePath).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer = new MediaPlayer(media);
             model.setMediaPlayer(mediaPlayer);
             mediaPlayer.play();
-        }
-    }
-    public void stopPlayback() {
-        MediaPlayer mediaPlayer = model.getMediaPlayer();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-        }
-    }
 
+        }
+    }
     public void pausePlayback() {
         MediaPlayer mediaPlayer = model.getMediaPlayer();
         if (mediaPlayer != null) {
