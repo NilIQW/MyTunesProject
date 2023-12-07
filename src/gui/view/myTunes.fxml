@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane style="-fx-background-color: #C9BFE5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MyTunesController">
     <children>
         <HBox layoutY="1.0" prefHeight="178.0" prefWidth="822.0">
@@ -128,13 +129,33 @@
                     </VBox.margin>
                 </Label>
             <TableView fx:id="songTableView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="380.0" prefWidth="393.0" style="-fx-background-color: #E5DFF6;">
-              <columns>
-                <TableColumn fx:id="idColumn" prefWidth="28.0" text="ID" />
-                <TableColumn fx:id="titleColumn" prefWidth="128.0" text="Title" />
-                  <TableColumn fx:id="artistColumn" prefWidth="116.0" text="Artist" />
-                  <TableColumn fx:id="genreColumn" prefWidth="60.0" text="Genre" />
-                  <TableColumn fx:id="durationColumn" prefWidth="60.0" text="Duration" />
-              </columns>
+                <columns>
+                    <TableColumn fx:id="idColumn" prefWidth="28.0" text="ID">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="id"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="titleColumn" prefWidth="128.0" text="Title">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="title"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="artistColumn" prefWidth="116.0" text="Artist">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="artist"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="genreColumn" prefWidth="60.0" text="Genre">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="genre"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="durationColumn" prefWidth="60.0" text="Duration">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="duration"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
             </TableView>
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
@@ -153,7 +174,7 @@
                                 <Insets left="5.0" right="5.0" top="3.0" />
                             </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #E5DFF6;" text="Close">
+                        <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#close" style="-fx-background-color: #E5DFF6;" text="Close">
                             <HBox.margin>
                                 <Insets left="170.0" top="3.0" />
                             </HBox.margin>

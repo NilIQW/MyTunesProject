@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -25,8 +26,10 @@ import java.util.ResourceBundle;
 
 
 public class MyTunesController implements Initializable {
+
+
     @FXML
-    public TableView<Song> songTableView;
+    private TableView<Song> songTableView;
     @FXML
     public TableColumn<Song, String> durationColumn;
     @FXML
@@ -41,7 +44,9 @@ public class MyTunesController implements Initializable {
     @FXML
     private Slider volumeSlider;
     private MediaPlayer mediaPlayer;
-
+    public TableView<Song> getSongTableView() {
+        return songTableView;
+    }
     public void setModel(MyTunesModel model){
         this.model = model;
     }
@@ -59,9 +64,23 @@ public class MyTunesController implements Initializable {
 
 
     private void setupTableColumns() {
-        titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
-        genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
+        TableColumn<Song, String> idColumn = new TableColumn<>("ID");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Song, String> titleColumn = new TableColumn<>("Title");
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        TableColumn<Song, String> artistColumn = new TableColumn<>("Artist");
+        artistColumn.setCellValueFactory(new PropertyValueFactory<>("artist"));
+        TableColumn<Song, String> genreColumn = new TableColumn<>("Genre");
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        TableColumn<Song, String> durationColumn = new TableColumn<>("Duration");
+        durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
+
+        songTableView.getColumns().addAll(idColumn, titleColumn, artistColumn, genreColumn, durationColumn);
+
+    }
+
+    public void getSongs(){
+        Song newSong = new Song("", "", "", "", "");
     }
 
     public void newPlaylist(ActionEvent actionEvent) {
@@ -76,10 +95,12 @@ public class MyTunesController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newSongWin.fxml"));
             Parent root = loader.load();
+
             NewSongWinController newSongWinController = loader.getController();
             newSongWinController.setSongTableView(songTableView);
             newSongWinController.setMyTunesModel(model);
             newSongWinController.setMyTunesController(this);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
@@ -88,6 +109,7 @@ public class MyTunesController implements Initializable {
         }
     }
     public void playSelectedSong(){
+        MyTunesController myTunesController = new MyTunesController();
         Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
         if(selectedSong!=null && selectedSong.getFilePath() != null && !selectedSong.getFilePath().isEmpty()){
             String filePath = selectedSong.getFilePath();
@@ -97,7 +119,7 @@ public class MyTunesController implements Initializable {
 
             mediaPlayer.setVolume(volumeSlider.getValue());
 
-            titleColumn.setText(selectedSong.getName());
+            titleColumn.setText(selectedSong.getTitle());
 
             mediaPlayer.play();
 
@@ -129,8 +151,11 @@ public class MyTunesController implements Initializable {
             songs.addAll(model.getSongs());
         }
     }
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         setupTableColumns();
         initializeSongTable();
 
@@ -138,4 +163,10 @@ public class MyTunesController implements Initializable {
             setVolume();
         }
     }
+
+    public void close(ActionEvent actionEvent) {
+
+    }
+
+
 }

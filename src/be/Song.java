@@ -1,34 +1,47 @@
 package be;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
-
 public class Song {
-    private int ID = -1;
+    private int id;
     private String title;
     private String artist;
+    private String genre;
     private String filePath;
+    private String duration;
 
-    public Song(String title, String artist, String genre, int time, String filePath) {
-        this.title=title;
-        this.artist=artist;
-        this.filePath=filePath;
+    /*public Song(int id, String title, String artist, String genre, String filePath, String duration) {
+        this.id = id;
+        this.title = title;
+        this.artist = artist;
+        this.genre = genre;
+        this.filePath = filePath;
+        this.duration = duration;
+    }*/
+
+    public Song(String title, String artist, String genre, String filePath, String duration) {
+        this.title = title;
+        this.artist = artist;
+        this.genre = genre;
+        this.filePath = filePath;
+        this.duration = duration;
     }
 
-    public int getID() {
-        return ID;
+    public Song() {
+
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public int getId() {
+        return id;
     }
 
-    public String getName() {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
         return title;
     }
 
-    public void setName(String name) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -40,6 +53,14 @@ public class Song {
         this.artist = artist;
     }
 
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
     public String getFilePath() {
         return filePath;
     }
@@ -48,13 +69,11 @@ public class Song {
         this.filePath = filePath;
     }
 
-    public StringProperty titleProperty() {
-        return new SimpleStringProperty();
+    public String getDuration() {
+        return duration;
     }
-    public StringProperty artistProperty() {
-        return new SimpleStringProperty();
-    }
-    public StringProperty genreProperty() {
-        return new SimpleStringProperty();
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

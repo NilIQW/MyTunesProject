@@ -10,8 +10,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -23,26 +27,20 @@ public class NewSongWinController implements Initializable {
     @FXML
     private TextField artistTextfield;
     @FXML
-    private TextField timeTextfield;
-    @FXML
     private TableView<Song> songTableView;
-
     @FXML
     private ChoiceBox<String> genreChoicebox;
     private String filePath = "media";
     private MyTunesModel model;
     private Stage newSongWindow;
-
-
+    private MyTunesController myTunesController;
     public void setMyTunesController(MyTunesController myTunesController) {
+        this.myTunesController = myTunesController;
     }
 
-    public void start(Stage newSongWindow){
-        this.newSongWindow=newSongWindow;
-        newSongWindow.setTitle("New/Edit Song");
-    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        chooseSongbtn(new ActionEvent());
         populateChoicebox();
     }
     public void chooseSongbtn(ActionEvent actionEvent) {
@@ -55,37 +53,47 @@ public class NewSongWinController implements Initializable {
             if (selectedFiles != null) {
                 loadSongs(selectedFiles);
             }
-            MyTunesController myTunesController = new MyTunesController();
             if (myTunesController != null) {
-                myTunesController.playSelectedSong();//problem??
+                myTunesController.playSelectedSong();
             }
         }
     }
     private void loadSongs(List<File> songFiles) {
         if(model != null) {
             for (File file : songFiles) {
-                Song newSong = new Song(file.getName(), "", "", 0, "");
-                newSong.setFilePath(file.getAbsolutePath());
-                model.addSong(newSong);
+                String filePath = file.getAbsolutePath();
+
+                Media media = new Media(new File(filePath).toURI().toString());
+                MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+
+                mediaPlayer.setOnReady(() -> {
+                    String duration = formatDuration(media.getDuration());
+                    Song newSong = new Song(file.getName(), artistTextfield.getText(), genreChoicebox.getValue(), filePath, duration);
+                    model.addSong(newSong);
+
+                    ObservableList<Song> updatedSongs = FXCollections.observableArrayList(model.getSongs());
+                    songTableView.setItems(updatedSongs);
+
+                    mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.dispose());
+                });
+
             }
-            ObservableList<Song> updatedSongs =FXCollections.observableArrayList(model.getSongs());
-            songTableView.setItems(updatedSongs);
+                
+
+            }
         }
-    }
+    /*public void deleteSong(){
+        ObservableList<Song> selectedSongs = songTableView.getSelectionModel().getSelectedItems();
+        if(!selectedSongs.isEmpty()){
+            model.removeSongs(selectedSongs);
+        }
 
-
-    public void saveSongInfo(){
-        String title = titleTextfield.getText();
-        String artist = artistTextfield.getText();
-        int time = Integer.parseInt(timeTextfield.getText());
-        String genre = genreChoicebox.getValue();
-        Song newSong = new Song(title, artist, genre, time, filePath);
-        model.addSong(newSong);
-        titleTextfield.clear();
-        artistTextfield.clear();
-        timeTextfield.clear();
-        newSongWindow.close();
-
+    }*/
+    private String formatDuration(Duration duration){
+        long minutes = (long) duration.toMinutes();
+        long seconds = (long) (duration.toSeconds() % 60);
+        return String.format("%02d:%02d", minutes, seconds);
     }
 
     public void setMyTunesModel(MyTunesModel model){
@@ -98,9 +106,7 @@ public class NewSongWinController implements Initializable {
         genreChoicebox.setValue("Pop");
     }
 
-
     public void done(ActionEvent actionEvent) {
-
     }
 
     public void setSongTableView(TableView<Song> songTableView) {

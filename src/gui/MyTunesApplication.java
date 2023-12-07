@@ -16,12 +16,14 @@ public class MyTunesApplication extends Application {
 
         MyTunesController myTunesController = loader.getController();
         myTunesController.setModel(new MyTunesModel());
-        myTunesController.setSongTableView(myTunesController.songTableView);
+        myTunesController.setSongTableView(myTunesController.getSongTableView());
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("My Tunes");
         primaryStage.show();
+
+
     }
 
     public static void main(String[] args) {
