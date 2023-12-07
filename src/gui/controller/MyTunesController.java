@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.media.Media;
@@ -27,37 +28,40 @@ public class MyTunesController implements Initializable {
     @FXML
     public TableView<Song> songTableView;
     @FXML
+    public TableColumn<Song, String> durationColumn;
+    @FXML
+    public TableColumn<Song, String> idColumn;
+    @FXML
     public TableColumn<Song, String> titleColumn;
     @FXML
     public TableColumn<Song, String> artistColumn;
     @FXML
     public TableColumn<Song, String> genreColumn;
     private MyTunesModel model;
-
+    @FXML
+    private Slider volumeSlider;
     private MediaPlayer mediaPlayer;
 
     public void setModel(MyTunesModel model){
         this.model = model;
     }
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("My Tunes");
+
+
+
+    private void setVolume() {
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            double volume = newValue.doubleValue();
+            if(mediaPlayer !=null) {
+            mediaPlayer.setVolume(volume);
+            }
+        });
     }
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+
+
+    private void setupTableColumns() {
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
-        genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());;
-        ObservableList<Song> songs = FXCollections.observableArrayList();
-        songTableView.setItems(songs);
-
-        if (model != null) {
-            songs.addAll(model.getSongs());
-        }
-        /*songTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldSong, newSong) -> {
-            if (newSong != null) {
-                playSelectedSong();
-            }
-        });*/
+        genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
     }
 
     public void newPlaylist(ActionEvent actionEvent) {
@@ -90,6 +94,11 @@ public class MyTunesController implements Initializable {
             Media media = new Media(new File(filePath).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             model.setMediaPlayer(mediaPlayer);
+
+            mediaPlayer.setVolume(volumeSlider.getValue());
+
+            titleColumn.setText(selectedSong.getName());
+
             mediaPlayer.play();
 
         }
@@ -103,5 +112,30 @@ public class MyTunesController implements Initializable {
 
     public void play(ActionEvent actionEvent) {
         playSelectedSong();
+    }
+
+    public void pauseBtn(ActionEvent actionEvent) {
+        pausePlayback();
+    }
+    public void setSongTableView(TableView<Song> songTableView) {
+        this.songTableView = songTableView;
+
+
+    }
+    private void initializeSongTable(){
+        ObservableList<Song> songs = FXCollections.observableArrayList();
+        songTableView.setItems(songs);
+        if(model != null){
+            songs.addAll(model.getSongs());
+        }
+    }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setupTableColumns();
+        initializeSongTable();
+
+        if(volumeSlider != null) {
+            setVolume();
+        }
     }
 }

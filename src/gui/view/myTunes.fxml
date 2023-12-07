@@ -17,17 +17,21 @@
     <children>
         <HBox layoutY="1.0" prefHeight="178.0" prefWidth="822.0">
             <children>
-                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                <AnchorPane prefHeight="178.0" prefWidth="245.0">
                     <children>
-                        <Button layoutX="32.0" layoutY="62.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="35.0" style="-fx-background-radius: 16; -fx-background-color: #E5DFF6;" text="◃◃" />
-                        <Button fx:id="play" layoutX="73.0" layoutY="53.0" mnemonicParsing="false" onAction="#play" prefHeight="50.0" prefWidth="50.0" style="-fx-background-radius: 36; -fx-background-color: #E5DFF6;" text="▶" />
-                        <Button layoutX="129.0" layoutY="61.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="35.0" style="-fx-background-color: #E5DFF6; -fx-background-radius: 16;" text="▹▹" />
-                        <Slider layoutX="41.0" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="2.0" prefWidth="114.0" style="-fx-background-color: #C9BFE5;" />
+                        <Button layoutX="23.0" layoutY="62.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="35.0" style="-fx-background-radius: 16; -fx-background-color: #E5DFF6;" text="◃◃" />
+                        <Button fx:id="play" layoutX="63.0" layoutY="57.0" mnemonicParsing="false" onAction="#play" prefHeight="43.0" prefWidth="45.0" style="-fx-background-radius: 36; -fx-background-color: #E5DFF6;" text="▶">
+                     <font>
+                        <Font size="21.0" />
+                     </font></Button>
+                        <Button layoutX="166.0" layoutY="62.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="35.0" style="-fx-background-color: #E5DFF6; -fx-background-radius: 16;" text="▹▹" />
+                        <Slider fx:id="volumeSlider" layoutX="41.0" layoutY="128.0" max="50.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="16.0" prefWidth="160.0" style="-fx-background-color: #C9BFE5;" value="2.0" />
                         <Label layoutX="17.0" layoutY="121.0" text="🔊">
                             <font>
                                 <Font size="19.0" />
                             </font>
                         </Label>
+                  <Button fx:id="pause" layoutX="115.0" layoutY="57.0" mnemonicParsing="false" onAction="#pauseBtn" prefHeight="43.0" prefWidth="45.0" style="-fx-background-radius: 36; -fx-background-color: #E5DFF6;" text="▐▐" />
                     </children>
                 </AnchorPane>
                 <HBox prefHeight="178.0" prefWidth="329.0" />
@@ -125,11 +129,11 @@
                 </Label>
             <TableView fx:id="songTableView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="380.0" prefWidth="393.0" style="-fx-background-color: #E5DFF6;">
               <columns>
-                <TableColumn prefWidth="28.0" text="ID" />
+                <TableColumn fx:id="idColumn" prefWidth="28.0" text="ID" />
                 <TableColumn fx:id="titleColumn" prefWidth="128.0" text="Title" />
                   <TableColumn fx:id="artistColumn" prefWidth="116.0" text="Artist" />
                   <TableColumn fx:id="genreColumn" prefWidth="60.0" text="Genre" />
-                  <TableColumn prefWidth="60.0" text="Duration" />
+                  <TableColumn fx:id="durationColumn" prefWidth="60.0" text="Duration" />
               </columns>
             </TableView>
                 <HBox prefHeight="100.0" prefWidth="200.0">

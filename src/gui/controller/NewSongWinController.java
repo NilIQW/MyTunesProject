@@ -26,7 +26,6 @@ public class NewSongWinController implements Initializable {
     private TextField timeTextfield;
     @FXML
     private TableView<Song> songTableView;
-    private MyTunesController myTunesController;
 
     @FXML
     private ChoiceBox<String> genreChoicebox;
@@ -36,7 +35,6 @@ public class NewSongWinController implements Initializable {
 
 
     public void setMyTunesController(MyTunesController myTunesController) {
-        this.myTunesController = myTunesController;
     }
 
     public void start(Stage newSongWindow){
@@ -75,9 +73,7 @@ public class NewSongWinController implements Initializable {
         }
     }
 
-    public void setSongTableView(TableView<Song> songTableView) {
-        this.songTableView = songTableView;
-    }
+
     public void saveSongInfo(){
         String title = titleTextfield.getText();
         String artist = artistTextfield.getText();
@@ -105,6 +101,10 @@ public class NewSongWinController implements Initializable {
 
     public void done(ActionEvent actionEvent) {
 
+    }
+
+    public void setSongTableView(TableView<Song> songTableView) {
+        this.songTableView = songTableView;
     }
 }
 
