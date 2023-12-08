@@ -1,4 +1,4 @@
-package gui.view;
+package gui.controller;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class NewPlaylist {
+public class NewPlaylistController {
 
     public static void display(){
         Stage newPlaylist = new Stage();

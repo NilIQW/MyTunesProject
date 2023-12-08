@@ -2,7 +2,6 @@ package gui.controller;
 
 import be.Song;
 import gui.MyTunesModel;
-import gui.view.NewPlaylist;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +16,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -50,9 +50,6 @@ public class MyTunesController implements Initializable {
     public void setModel(MyTunesModel model){
         this.model = model;
     }
-
-
-
     private void setVolume() {
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             double volume = newValue.doubleValue();
@@ -61,8 +58,6 @@ public class MyTunesController implements Initializable {
             }
         });
     }
-
-
     private void setupTableColumns() {
         TableColumn<Song, String> idColumn = new TableColumn<>("ID");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -79,19 +74,15 @@ public class MyTunesController implements Initializable {
 
     }
 
-    public void getSongs(){
-        Song newSong = new Song("", "", "", "", "");
-    }
-
     public void newPlaylist(ActionEvent actionEvent) {
-        NewPlaylist.display();
+        NewPlaylistController.display();
     }
     public void editPlaylist(ActionEvent actionEvent) {
-        NewPlaylist.display();
+        NewPlaylistController.display();
     }
 
 
-    public void openNewSong(ActionEvent actionEvent) throws IOException {
+    public void openNewSongWin(ActionEvent actionEvent) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newSongWin.fxml"));
             Parent root = loader.load();
@@ -100,8 +91,10 @@ public class MyTunesController implements Initializable {
             newSongWinController.setSongTableView(songTableView);
             newSongWinController.setMyTunesModel(model);
             newSongWinController.setMyTunesController(this);
-
+            newSongWinController.setNewSongWindow(new Stage());
             Stage stage = new Stage();
+
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
@@ -155,7 +148,6 @@ public class MyTunesController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         setupTableColumns();
         initializeSongTable();
 
@@ -167,6 +159,22 @@ public class MyTunesController implements Initializable {
     public void close(ActionEvent actionEvent) {
 
     }
+    public void deleteSongs(){
+        ObservableList<Song> selectedSongs = songTableView.getSelectionModel().getSelectedItems();
+        if(!selectedSongs.isEmpty()){
+            model.removeSongs(selectedSongs);
+        }
+    }
 
+    public void DeleteSong(ActionEvent actionEvent) {
+        deleteSongs();
+        initializeSongTable();
+    }
 
+    public void DeletePSong(ActionEvent actionEvent) {
+
+    }
+
+    public void DeletePlaylist(ActionEvent actionEvent) {
+    }
 }

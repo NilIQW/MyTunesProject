@@ -37,6 +37,9 @@ public class NewSongWinController implements Initializable {
     public void setMyTunesController(MyTunesController myTunesController) {
         this.myTunesController = myTunesController;
     }
+    public void setNewSongWindow(Stage newSongWindow){
+        this.newSongWindow=newSongWindow;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -53,9 +56,7 @@ public class NewSongWinController implements Initializable {
             if (selectedFiles != null) {
                 loadSongs(selectedFiles);
             }
-            if (myTunesController != null) {
-                myTunesController.playSelectedSong();
-            }
+
         }
     }
     private void loadSongs(List<File> songFiles) {
@@ -75,7 +76,7 @@ public class NewSongWinController implements Initializable {
                     ObservableList<Song> updatedSongs = FXCollections.observableArrayList(model.getSongs());
                     songTableView.setItems(updatedSongs);
 
-                    mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.dispose());
+                    mediaPlayer.setOnEndOfMedia(mediaPlayer::dispose);
                 });
 
             }
@@ -83,13 +84,7 @@ public class NewSongWinController implements Initializable {
 
             }
         }
-    /*public void deleteSong(){
-        ObservableList<Song> selectedSongs = songTableView.getSelectionModel().getSelectedItems();
-        if(!selectedSongs.isEmpty()){
-            model.removeSongs(selectedSongs);
-        }
 
-    }*/
     private String formatDuration(Duration duration){
         long minutes = (long) duration.toMinutes();
         long seconds = (long) (duration.toSeconds() % 60);
@@ -107,10 +102,13 @@ public class NewSongWinController implements Initializable {
     }
 
     public void done(ActionEvent actionEvent) {
+        newSongWindow.close();
     }
 
     public void setSongTableView(TableView<Song> songTableView) {
         this.songTableView = songTableView;
     }
+
+
 }
 
