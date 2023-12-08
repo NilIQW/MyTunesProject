@@ -26,7 +26,7 @@ public class ConnectionManager {
     }
 
     public static void main(String[] args) throws SQLException {
-        /*ConnectionManager databaseConnection = new ConnectionManager();
+        ConnectionManager databaseConnection = new ConnectionManager();
         Connection connection = databaseConnection.getConnection();
         System.out.println("Yaaay!");
         connection.close();*/

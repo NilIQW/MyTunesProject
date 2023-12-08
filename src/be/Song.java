@@ -6,14 +6,21 @@ public class Song {
     private String artist;
     private String genre;
     private String filePath;
+<<<<<<< HEAD
     private String time;
 
     public Song(int id, String title, String artist, String genre, String filePath, String time) {
+=======
+    private String duration;
+
+    /*public Song(int id, String title, String artist, String genre, String filePath, String duration) {
+>>>>>>> revert(2hrs-ago)
         this.id = id;
         this.title = title;
         this.artist = artist;
         this.genre = genre;
         this.filePath = filePath;
+<<<<<<< HEAD
         this.time = time;
     }
 
@@ -33,6 +40,27 @@ public class Song {
         return id;
     }
 
+=======
+        this.duration = duration;
+    }*/
+
+    public Song(String title, String artist, String genre, String filePath, String duration) {
+        this.title = title;
+        this.artist = artist;
+        this.genre = genre;
+        this.filePath = filePath;
+        this.duration = duration;
+    }
+
+    public Song() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+>>>>>>> revert(2hrs-ago)
     public void setId(int id) {
         this.id = id;
     }
@@ -69,6 +97,7 @@ public class Song {
         this.filePath = filePath;
     }
 
+<<<<<<< HEAD
     public String getTime() {
         return time;
     }
@@ -77,3 +106,13 @@ public class Song {
         this.time = time;
     }
 }
+=======
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+}
+>>>>>>> revert(2hrs-ago)
