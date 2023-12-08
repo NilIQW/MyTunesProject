@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -43,6 +44,8 @@ public class MyTunesController implements Initializable {
     private MyTunesModel model;
     @FXML
     private Slider volumeSlider;
+    @FXML
+    private ListView<Song> playlistView;
     private MediaPlayer mediaPlayer;
     public TableView<Song> getSongTableView() {
         return songTableView;
@@ -74,11 +77,19 @@ public class MyTunesController implements Initializable {
 
     }
 
-    public void newPlaylist(ActionEvent actionEvent) {
-        NewPlaylistController.display();
+    public void newPlaylist(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newPlaylist.fxml"));
+        Parent root = loader.load();
+        NewPlaylistController newPlaylistController = loader.getController();
+
+        Stage stage = new Stage();
+        stage.setTitle("New/Edit Playlist");
+
+        stage.setScene(new Scene(root));
+        stage.show();
     }
     public void editPlaylist(ActionEvent actionEvent) {
-        NewPlaylistController.display();
+
     }
 
 
@@ -91,10 +102,15 @@ public class MyTunesController implements Initializable {
             newSongWinController.setSongTableView(songTableView);
             newSongWinController.setMyTunesModel(model);
             newSongWinController.setMyTunesController(this);
+
             newSongWinController.setNewSongWindow(new Stage());
+
             Stage stage = new Stage();
 
-            stage.initModality(Modality.APPLICATION_MODAL);
+            Stage mainStage =(Stage) songTableView.getScene().getWindow();
+            stage.initOwner(mainStage);
+
+            stage.setTitle("New/Edit Song");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {

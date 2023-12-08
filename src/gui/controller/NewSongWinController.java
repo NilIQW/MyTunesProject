@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -30,7 +31,6 @@ public class NewSongWinController implements Initializable {
     private TableView<Song> songTableView;
     @FXML
     private ChoiceBox<String> genreChoicebox;
-    private String filePath = "media";
     private MyTunesModel model;
     private Stage newSongWindow;
     private MyTunesController myTunesController;
@@ -83,6 +83,7 @@ public class NewSongWinController implements Initializable {
                 
 
             }
+
         }
 
     private String formatDuration(Duration duration){
@@ -102,8 +103,12 @@ public class NewSongWinController implements Initializable {
     }
 
     public void done(ActionEvent actionEvent) {
-        newSongWindow.close();
+
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
+
 
     public void setSongTableView(TableView<Song> songTableView) {
         this.songTableView = songTableView;
