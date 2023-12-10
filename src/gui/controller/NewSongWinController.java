@@ -32,8 +32,8 @@ public class NewSongWinController implements Initializable {
     @FXML
     private ChoiceBox<String> genreChoicebox;
     private MyTunesModel model;
-    private Stage newSongWindow;
-    private MyTunesController myTunesController;
+    public Stage newSongWindow;
+    public MyTunesController myTunesController;
     public void setMyTunesController(MyTunesController myTunesController) {
         this.myTunesController = myTunesController;
     }
@@ -71,7 +71,7 @@ public class NewSongWinController implements Initializable {
                 mediaPlayer.setOnReady(() -> {
                     String duration = formatDuration(media.getDuration());
                     Song newSong = new Song(file.getName(), artistTextfield.getText(), genreChoicebox.getValue(), filePath, duration);
-                    model.addSong(newSong);
+                    model.addSongs(newSong);
 
                     ObservableList<Song> updatedSongs = FXCollections.observableArrayList(model.getSongs());
                     songTableView.setItems(updatedSongs);

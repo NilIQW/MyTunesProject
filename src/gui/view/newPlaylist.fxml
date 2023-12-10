@@ -9,8 +9,8 @@
 <AnchorPane prefHeight="219.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NewPlaylistController">
    <children>
       <Label layoutX="61.0" layoutY="85.0" text="Name:" />
-      <TextField layoutX="104.0" layoutY="81.0" prefHeight="26.0" prefWidth="223.0" />
+      <TextField fx:id="playlistTextfield" layoutX="104.0" layoutY="81.0" prefHeight="26.0" prefWidth="223.0" />
       <Button fx:id="cancel" layoutX="189.0" layoutY="128.0" mnemonicParsing="false" onAction="#cancelBtn" text="Cancel" />
-      <Button layoutX="273.0" layoutY="128.0" mnemonicParsing="false" text="Save" />
+      <Button fx:id="saveBtn" layoutX="273.0" layoutY="128.0" mnemonicParsing="false" onAction="#savePlaylist" text="Save" />
    </children>
 </AnchorPane>

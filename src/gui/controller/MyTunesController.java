@@ -1,5 +1,6 @@
 package gui.controller;
 
+import be.Playlist;
 import be.Song;
 import gui.MyTunesModel;
 import javafx.collections.FXCollections;
@@ -17,18 +18,19 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class MyTunesController implements Initializable {
-
-
+    @FXML
+    private ListView<Playlist> playlistView;
     @FXML
     private TableView<Song> songTableView;
     @FXML
@@ -44,14 +46,13 @@ public class MyTunesController implements Initializable {
     private MyTunesModel model;
     @FXML
     private Slider volumeSlider;
-    @FXML
-    private ListView<Song> playlistView;
     private MediaPlayer mediaPlayer;
     public TableView<Song> getSongTableView() {
         return songTableView;
     }
     public void setModel(MyTunesModel model){
         this.model = model;
+        playlistView.setItems(model.playlistsProperty());
     }
     private void setVolume() {
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -81,6 +82,7 @@ public class MyTunesController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newPlaylist.fxml"));
         Parent root = loader.load();
         NewPlaylistController newPlaylistController = loader.getController();
+        newPlaylistController.setModel(model);
 
         Stage stage = new Stage();
         stage.setTitle("New/Edit Playlist");
@@ -91,18 +93,16 @@ public class MyTunesController implements Initializable {
     public void editPlaylist(ActionEvent actionEvent) {
 
     }
-
-
     public void openNewSongWin(ActionEvent actionEvent) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newSongWin.fxml"));
             Parent root = loader.load();
 
             NewSongWinController newSongWinController = loader.getController();
-            newSongWinController.setSongTableView(songTableView);
             newSongWinController.setMyTunesModel(model);
-            newSongWinController.setMyTunesController(this);
+            newSongWinController.setSongTableView(songTableView);
 
+            newSongWinController.setMyTunesController(this);
             newSongWinController.setNewSongWindow(new Stage());
 
             Stage stage = new Stage();
@@ -118,7 +118,6 @@ public class MyTunesController implements Initializable {
         }
     }
     public void playSelectedSong(){
-        MyTunesController myTunesController = new MyTunesController();
         Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
         if(selectedSong!=null && selectedSong.getFilePath() != null && !selectedSong.getFilePath().isEmpty()){
             String filePath = selectedSong.getFilePath();
@@ -192,5 +191,10 @@ public class MyTunesController implements Initializable {
     }
 
     public void DeletePlaylist(ActionEvent actionEvent) {
+    }
+
+
+    public void addSongsToPlaylist(ActionEvent actionEvent) {
+
     }
 }

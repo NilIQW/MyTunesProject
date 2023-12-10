@@ -1,5 +1,7 @@
 package be;
 
+import java.util.List;
+
 public class Song {
     private int id;
     private String title;
@@ -7,6 +9,7 @@ public class Song {
     private String genre;
     private String filePath;
     private String duration;
+    private List<Playlist> playlists;
 
     /*public Song(int id, String title, String artist, String genre, String filePath, String duration) {
         this.id = id;
@@ -75,5 +78,12 @@ public class Song {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public void addPlaylist(Playlist playlist) {
+        playlists.add(playlist);
+    }
+    public void removePlaylist(Playlist playlist){
+        playlists.remove(playlist);
     }
 }
