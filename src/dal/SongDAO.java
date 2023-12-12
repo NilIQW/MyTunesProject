@@ -6,95 +6,123 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongDAO implements ISongDAO{
-    private final ConnectionManager cm = new ConnectionManager();
+public class SongDAO {
+    private final ConnectionManager connectionManager = new ConnectionManager();
 
-    @Override
     public Song getSong(int id) {
-        try(Connection con = cm.getConnection())
-        {
-            String sql = "SELECT * FROM Song WHERE id=?";
+        try (Connection con = connectionManager.getConnection()) {
+            String sql = "SELECT * FROM Songs WHERE id=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()){
-                String title     = rs.getString("title");
-                String artist    = rs.getString("artist");
+            while (rs.next()) {
+                int songId = rs.getInt("id");
+                String title = rs.getString("title");
+                String artist = rs.getString("artist");
+                String genre = rs.getString("genre");
+                String filePath = rs.getString("filePath");
+                String duration = rs.getString("duration");
 
-                Song newSong = new Song();
-                return newSong;
+                Song song = new Song(songId, title, artist, genre, filePath, duration);
+                return song;
             }
             return null;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error getting song from the database", e);
         }
     }
 
+    public void addSong(Song song) {
+        String sql = "INSERT INTO Songs (title, artist, genre, filePath, duration) VALUES (?, ?, ?, ?, ?)";
 
-    @Override
-    public void deleteSong(int id) {
-        try(Connection con = cm.getConnection())
-        {
-            String sql = "DELETE FROM Song WHERE id=?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            pstmt.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        try (Connection con = connectionManager.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-    }
-
-    @Override
-    public void updateSong(Song song) {
-        try(Connection con = cm.getConnection())
-        {
-            String sql = "UPDATE Song SET title=?, artist=? WHERE id=?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, song.getTitle());
             pstmt.setString(2, song.getArtist());
             pstmt.setString(3, song.getGenre());
-            pstmt.execute();
+            pstmt.setString(4, song.getFilePath());
+            pstmt.setString(5, song.getDuration());
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Adding song failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1);
+                    song.setId(generatedId); // Set the generated ID back to the Song object
+                } else {
+                    throw new SQLException("Adding song failed, no ID obtained.");
+                }
+            }
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error adding song to the database", e);
         }
     }
 
-    @Override
-    public void createSong(Song song) {
-        try(Connection con = cm.getConnection())
-        {
-            String sql = "INSERT INTO Songs(title, artist) VALUES (?,?)";
-            PreparedStatement pstmt = con.prepareStatement(sql);
+    public void updateSong(Song song) {
+        String sql = "UPDATE Songs SET title=?, artist=?, genre=?, filePath=?, duration=? WHERE id=?";
+
+        try (Connection con = connectionManager.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
             pstmt.setString(1, song.getTitle());
             pstmt.setString(2, song.getArtist());
-            pstmt.execute();
+            pstmt.setString(3, song.getGenre());
+            pstmt.setString(4, song.getFilePath());
+            pstmt.setString(5, song.getDuration());
+            pstmt.setInt(6, song.getId());
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Updating song failed, no rows affected.");
+            }
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error updating song in the database", e);
         }
     }
 
-    @Override
+    public void deleteSong(int id) {
+        String sql = "DELETE FROM Songs WHERE id=?";
+
+        try (Connection con = connectionManager.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting song from the database", e);
+        }
+    }
+
     public List<Song> getAllSongs() {
         List<Song> songs = new ArrayList<>();
 
-        try(Connection con = cm.getConnection())
-        {
-            String sql = "SELECT * FROM Song";
+        try (Connection con = connectionManager.getConnection()) {
+            String sql = "SELECT * FROM Songs";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next()){
-                int id          = rs.getInt("id");
-                String name     = rs.getString("name");
-                String email    = rs.getString("email");
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String artist = rs.getString("artist");
+                String genre = rs.getString("genre");
+                String filePath = rs.getString("filePath");
+                String duration = rs.getString("duration");
 
-                Song song = new Song();
+                Song song = new Song(id, title, artist, genre, filePath, duration);
                 songs.add(song);
             }
             return songs;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error getting all songs from the database", e);
         }
     }
-    }
-
+}

@@ -8,14 +8,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.media.MediaPlayer;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class MyTunesModel {
     private MediaPlayer mediaPlayer;
-
     private ObservableList<Song> songs;
     private ObservableList<Playlist> playlists;
     private final ListProperty<Playlist> playlistsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final Connection connection;
 
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -23,10 +24,13 @@ public class MyTunesModel {
     public void setMediaPlayer(MediaPlayer mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
     }
-    public MyTunesModel(){
+    public MyTunesModel(Connection connection){
+        this.connection = connection;
         songs = FXCollections.observableArrayList();
         playlists = FXCollections.observableArrayList();
     }
+
+
     public ObservableList<Song> getSongs(){
         return songs;
     }

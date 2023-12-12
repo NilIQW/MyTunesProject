@@ -3,22 +3,13 @@ package be;
 import java.util.List;
 
 public class Song {
-    private int id;
+    private int id=-1;
     private String title;
     private String artist;
     private String genre;
     private String filePath;
     private String duration;
     private List<Playlist> playlists;
-
-    /*public Song(int id, String title, String artist, String genre, String filePath, String duration) {
-        this.id = id;
-        this.title = title;
-        this.artist = artist;
-        this.genre = genre;
-        this.filePath = filePath;
-        this.duration = duration;
-    }*/
 
     public Song(String title, String artist, String genre, String filePath, String duration) {
         this.title = title;
@@ -28,8 +19,13 @@ public class Song {
         this.duration = duration;
     }
 
-    public Song() {
-
+    public Song(int id, String title, String artist, String genre, String filePath, String duration) {
+        this.id=id;
+        this.title = title;
+        this.artist = artist;
+        this.genre = genre;
+        this.filePath = filePath;
+        this.duration = duration;
     }
 
     public int getId() {
@@ -85,5 +81,18 @@ public class Song {
     }
     public void removePlaylist(Playlist playlist){
         playlists.remove(playlist);
+    }
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", artist='" + artist + '\'' +
+                ", genre='" + genre + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", duration='" + duration + '\'' +
+                ", playlists=" + playlists +
+                '}';
     }
 }
