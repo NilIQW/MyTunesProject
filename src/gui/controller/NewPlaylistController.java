@@ -1,10 +1,13 @@
 package gui.controller;
 
+import be.Playlist;
 import bll.MyTunesModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -15,8 +18,19 @@ public class NewPlaylistController implements Initializable {
     private Stage newSongWin;
     @FXML
     private TextField playlistTextfield;
-
     private MyTunesModel model;
+    @FXML
+    private Button saveBtn;
+    private Playlist newPlaylistName;
+    @FXML
+    private ListView<Playlist> playlistView;
+
+    public void setNewPlaylistName(Playlist newPlaylistName) {
+        this.newPlaylistName = newPlaylistName;
+    }
+    public Playlist getNewPlaylistName(){
+        return newPlaylistName;
+    }
 
     public void setModel(MyTunesModel model) {
         this.model = model;
@@ -49,4 +63,13 @@ public class NewPlaylistController implements Initializable {
     }
 
 
+    public void savePlaylistName(ActionEvent actionEvent) {
+        if(newPlaylistName!=null) {
+            String newPlaylist = playlistTextfield.getText();
+
+            newPlaylistName.setName(newPlaylistName);
+
+            playlistView.refresh();
+        }
+    }
 }

@@ -58,4 +58,17 @@ public class MyTunesModel {
     public ListProperty<Playlist> playlistsProperty() {
         return playlistsProperty;
     }
+
+    public void removePlaylist(Playlist selectedPlaylist) {
+        System.out.println("Attempting to remove playlist: " + selectedPlaylist.getName());
+        playlists.removeIf(playlist -> {
+            boolean shouldRemove = playlist.equals(selectedPlaylist);
+            if (shouldRemove) {
+                System.out.println("Removed playlist: " + playlist.getName());
+            }
+            return shouldRemove;
+        });
+    }
+
+
 }

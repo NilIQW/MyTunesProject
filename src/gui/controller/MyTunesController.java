@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,10 +51,7 @@ public class MyTunesController implements Initializable {
     private MediaPlayer mediaPlayer;
     private ObservableList<Song> allSongs;
     private ObservableList<Song> filteredSongs;
-
-    public TableView<Song> getSongTableView() {
-        return songTableView;
-    }
+    private VolumeSlider volumeSliderManager;
 
     public void setModel(MyTunesModel model) {
         this.model = model;
@@ -61,13 +59,13 @@ public class MyTunesController implements Initializable {
         initializeSearch();
     }
 
-    private void setVolume() {
-        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            double volume = newValue.doubleValue();
-            if (mediaPlayer != null) {
-                mediaPlayer.setVolume(volume);
-            }
-        });
+
+
+    public void setSongTableView(TableView<Song> songTableView) {
+        this.songTableView = songTableView;
+    }
+    public TableView<Song> getSongTableView() {
+        return songTableView;
     }
 
     private void setupTableColumns() {
@@ -101,6 +99,19 @@ public class MyTunesController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
+    public void editPlaylistName(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newPlaylist.fxml"));
+        Parent root = loader.load();
+        NewPlaylistController newPlaylistController = loader.getController();
+        newPlaylistController.setModel(model);
+
+        Stage stage = new Stage();
+        stage.setTitle("New/Edit Playlist");
+
+        stage.setScene(new Scene(root));
+        stage.show();
+
+    }
 
     public void editPlaylist(ActionEvent actionEvent) {
 
@@ -123,7 +134,7 @@ public class MyTunesController implements Initializable {
             Stage mainStage = (Stage) songTableView.getScene().getWindow();
             stage.initOwner(mainStage);
 
-            stage.setTitle("New/Edit Song");
+            stage.setTitle("New Song");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
@@ -195,12 +206,6 @@ public class MyTunesController implements Initializable {
         pausePlayback();
     }
 
-    public void setSongTableView(TableView<Song> songTableView) {
-        this.songTableView = songTableView;
-
-
-    }
-
     private void initializeSongTable() {
         ObservableList<Song> songs = FXCollections.observableArrayList();
         songTableView.setItems(songs);
@@ -214,19 +219,13 @@ public class MyTunesController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setupTableColumns();
         initializeSongTable();
-        setupVolume();
+
+        if (volumeSlider != null && mediaPlayer != null) {
+            volumeSliderManager = new VolumeSlider(volumeSlider, mediaPlayer);
+        }
+
         filteredSongs = FXCollections.observableArrayList();
     }
-
-
-
-
-    public void setupVolume() {
-        if (volumeSlider != null) {
-            setVolume();
-        }
-    }
-
     public void initializeSearch() {
         if (model != null) {
             allSongs = FXCollections.observableArrayList(model.getSongs());
@@ -257,7 +256,33 @@ public class MyTunesController implements Initializable {
     }
 
     public void DeletePlaylist(ActionEvent actionEvent) {
+        Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
+        if (selectedPlaylist != null) {
+            // Show confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Playlist");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you sure you want to delete the playlist '" + selectedPlaylist.getName() + "'?");
+
+            // Customize the alert style
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.initStyle(StageStyle.UNDECORATED);
+
+            // Wait for the user's response
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    // User clicked OK, delete the playlist
+                    model.removePlaylist(selectedPlaylist);
+
+                    // Clear and re-add playlists to refresh the playlistView
+                    playlistView.getItems().clear();
+                    playlistView.getItems().addAll(model.getPlaylists());
+                }
+            });
+        }
     }
+
+
 
 
     public void addSongsToPlaylist(ActionEvent actionEvent) {
@@ -283,6 +308,7 @@ public class MyTunesController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
 
 }

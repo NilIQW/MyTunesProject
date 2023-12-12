@@ -80,6 +80,9 @@ public class NewSongWinController implements Initializable {
 
             if (selectedFiles != null) {
                 loadSongs(selectedFiles);
+
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.close();
             }
 
         }
