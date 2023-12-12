@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -99,18 +100,33 @@ public class MyTunesController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
-    public void editPlaylistName(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newPlaylist.fxml"));
-        Parent root = loader.load();
-        NewPlaylistController newPlaylistController = loader.getController();
-        newPlaylistController.setModel(model);
+    @FXML
+    public void editPlaylistName(ActionEvent actionEvent) {
+        Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
+        if (selectedPlaylist != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newPlaylist.fxml"));
+                Parent root = loader.load();
 
-        Stage stage = new Stage();
-        stage.setTitle("New/Edit Playlist");
+                NewPlaylistController newPlaylistController = loader.getController();
+                newPlaylistController.setModel(model);
+                newPlaylistController.setNewSongWin(new Stage());
+                newPlaylistController.setPlaylistToEdit(selectedPlaylist);
 
-        stage.setScene(new Scene(root));
-        stage.show();
+                Stage stage = new Stage();
+                stage.setTitle("Edit Playlist");
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
 
+                if (newPlaylistController.isPlaylistUpdated()) {
+
+                    playlistView.getItems().clear();
+                    playlistView.getItems().addAll(model.getPlaylists());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void editPlaylist(ActionEvent actionEvent) {
@@ -258,23 +274,19 @@ public class MyTunesController implements Initializable {
     public void DeletePlaylist(ActionEvent actionEvent) {
         Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
         if (selectedPlaylist != null) {
-            // Show confirmation dialog
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Playlist");
             alert.setHeaderText(null);
             alert.setContentText("Are you sure you want to delete the playlist '" + selectedPlaylist.getName() + "'?");
 
-            // Customize the alert style
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
             stage.initStyle(StageStyle.UNDECORATED);
 
-            // Wait for the user's response
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    // User clicked OK, delete the playlist
+
                     model.removePlaylist(selectedPlaylist);
 
-                    // Clear and re-add playlists to refresh the playlistView
                     playlistView.getItems().clear();
                     playlistView.getItems().addAll(model.getPlaylists());
                 }

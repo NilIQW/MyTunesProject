@@ -69,6 +69,9 @@ public class MyTunesModel {
             return shouldRemove;
         });
     }
+    public void updatePlaylist(Playlist playlist, String newName) {
+        playlist.setName(newName);
+    }
 
 
 }

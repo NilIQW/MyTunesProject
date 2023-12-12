@@ -21,16 +21,23 @@ public class NewPlaylistController implements Initializable {
     private MyTunesModel model;
     @FXML
     private Button saveBtn;
-    private Playlist newPlaylistName;
+    private Playlist playlistToEdit;
     @FXML
     private ListView<Playlist> playlistView;
+    private Playlist existingPlaylist;
+    private boolean playlistUpdated;
 
-    public void setNewPlaylistName(Playlist newPlaylistName) {
-        this.newPlaylistName = newPlaylistName;
+    public void setPlaylistToEdit(Playlist playlistToEdit) {
+        this.playlistToEdit = playlistToEdit;
+        if (playlistToEdit != null) {
+            // If editing an existing playlist, set the current name in the text field
+            playlistTextfield.setText(playlistToEdit.getName());
+        }
     }
-    public Playlist getNewPlaylistName(){
-        return newPlaylistName;
+    public boolean isPlaylistUpdated(){
+        return playlistUpdated;
     }
+
 
     public void setModel(MyTunesModel model) {
         this.model = model;
@@ -54,22 +61,20 @@ public class NewPlaylistController implements Initializable {
     public void savePlaylist(ActionEvent actionEvent) {
         String playlistName = playlistTextfield.getText();
 
-        if(!playlistName.isEmpty()){
-            model.createPlaylist(playlistName);
+        if (!playlistName.isEmpty()) {
+            if (playlistToEdit != null) {
+                // Editing an existing playlist
+                playlistToEdit.setName(playlistName);
+                playlistUpdated = true;
+            } else {
+                // Creating a new playlist
+                model.createPlaylist(playlistName);
+            }
         }
+
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
     }
 
-
-    public void savePlaylistName(ActionEvent actionEvent) {
-        if(newPlaylistName!=null) {
-            String newPlaylist = playlistTextfield.getText();
-
-            newPlaylistName.setName(newPlaylistName);
-
-            playlistView.refresh();
-        }
-    }
 }

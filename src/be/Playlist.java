@@ -9,28 +9,33 @@ public class Playlist {
     private List<Song> songs;
 
     public Playlist(String name) {
-        this.name=name;
-        this.songs=new ArrayList<>();
+        this.name = name;
+        this.songs = new ArrayList<>();
     }
-    public void setName(Playlist newPlaylistName) {
-        this.name=name;
+
+    public void setName(String newName) {
+        this.name = newName;
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
+
     public List<Song> getSongs() {
         return songs;
     }
 
-    public void addSongs(Song song){
+    public void addSongs(Song song) {
         songs.add(song);
         song.addPlaylist(this);
     }
-    public void removeSongs(Song song){
+
+    public void removeSongs(Song song) {
         song.removePlaylist(this);
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return name;
     }
 
@@ -46,6 +51,4 @@ public class Playlist {
     public int hashCode() {
         return Objects.hash(name);
     }
-
-
 }
