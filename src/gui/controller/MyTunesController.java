@@ -2,13 +2,14 @@ package gui.controller;
 
 import be.Playlist;
 import be.Song;
-import gui.MyTunesModel;
+import bll.MyTunesModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -20,7 +21,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -131,6 +131,38 @@ public class MyTunesController implements Initializable {
         }
     }
 
+    @FXML
+    public void editBtn(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newSongWin.fxml"));
+            Parent root = loader.load();
+
+            NewSongWinController newSongWinController = loader.getController();
+            newSongWinController.setMyTunesModel(model);
+            newSongWinController.setSongTableView(songTableView);
+
+
+            Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
+            newSongWinController.setEditedSong(selectedSong);
+
+            newSongWinController.setMyTunesController(this);
+            newSongWinController.setNewSongWindow(new Stage());
+
+            Stage stage = new Stage();
+
+            Stage mainStage = (Stage) songTableView.getScene().getWindow();
+            stage.initOwner(mainStage);
+
+            stage.setTitle("Edit Song");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     public void playSelectedSong() {
         Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
         if (selectedSong != null && selectedSong.getFilePath() != null && !selectedSong.getFilePath().isEmpty()) {
@@ -203,7 +235,8 @@ public class MyTunesController implements Initializable {
         }
     }
     public void close(ActionEvent actionEvent) {
-
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
 
     public void deleteSongs() {
@@ -250,5 +283,6 @@ public class MyTunesController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
 }

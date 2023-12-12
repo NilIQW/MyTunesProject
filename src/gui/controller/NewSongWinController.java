@@ -1,13 +1,14 @@
 package gui.controller;
 
 import be.Song;
-import gui.MyTunesModel;
+import bll.MyTunesModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -24,9 +25,13 @@ import java.util.ResourceBundle;
 
 public class NewSongWinController implements Initializable {
     @FXML
+    private Button saveBtn;
+    @FXML
     private TextField titleTextfield;
     @FXML
     private TextField artistTextfield;
+    @FXML
+    private TextField timeTextfield;
     @FXML
     private TableView<Song> songTableView;
     @FXML
@@ -34,11 +39,14 @@ public class NewSongWinController implements Initializable {
     private MyTunesModel model;
     public Stage newSongWindow;
     public MyTunesController myTunesController;
+    private Song editedSong;
+
     public void setMyTunesController(MyTunesController myTunesController) {
         this.myTunesController = myTunesController;
     }
-    public void setNewSongWindow(Stage newSongWindow){
-        this.newSongWindow=newSongWindow;
+
+    public void setNewSongWindow(Stage newSongWindow) {
+        this.newSongWindow = newSongWindow;
     }
 
     @Override
@@ -46,8 +54,25 @@ public class NewSongWinController implements Initializable {
         chooseSongbtn(new ActionEvent());
         populateChoicebox();
     }
+
+    public void setEditedSong(Song editedSong) {
+        this.editedSong = editedSong;
+        setSongFields(editedSong);
+    }
+
+    public Song getEditedSong() {
+        return editedSong;
+    }
+
+    private void setSongFields(Song song) {
+        titleTextfield.setText(song.getTitle());
+        artistTextfield.setText(song.getArtist());
+        genreChoicebox.setValue(song.getGenre());
+
+    }
+
     public void chooseSongbtn(ActionEvent actionEvent) {
-        if(songTableView !=null) {
+        if (songTableView != null) {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choose songs");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Music Files", "*.mp3", "*.wav"));
@@ -58,9 +83,11 @@ public class NewSongWinController implements Initializable {
             }
 
         }
+
     }
+
     private void loadSongs(List<File> songFiles) {
-        if(model != null) {
+        if (model != null) {
             for (File file : songFiles) {
                 String filePath = file.getAbsolutePath();
 
@@ -80,24 +107,24 @@ public class NewSongWinController implements Initializable {
                 });
 
             }
-                
 
-            }
 
         }
 
-    private String formatDuration(Duration duration){
+    }
+
+    private String formatDuration(Duration duration) {
         long minutes = (long) duration.toMinutes();
         long seconds = (long) (duration.toSeconds() % 60);
         return String.format("%02d:%02d", minutes, seconds);
     }
 
-    public void setMyTunesModel(MyTunesModel model){
-        this.model=model;
+    public void setMyTunesModel(MyTunesModel model) {
+        this.model = model;
     }
 
-    public void populateChoicebox(){
-        ObservableList<String> genres = FXCollections.observableArrayList("Pop", "Rock","Country","Hip Hop");
+    public void populateChoicebox() {
+        ObservableList<String> genres = FXCollections.observableArrayList("Pop", "Rock", "Country", "Hip Hop");
         genreChoicebox.setItems(genres);
         genreChoicebox.setValue("Pop");
     }
@@ -115,5 +142,22 @@ public class NewSongWinController implements Initializable {
     }
 
 
-}
+    public void Save(ActionEvent actionEvent) {
+        if (editedSong != null) {
+            String newTitle = titleTextfield.getText();
+            String newArtist = artistTextfield.getText();
+            String newGenre = genreChoicebox.getValue();
 
+
+            editedSong.setTitle(newTitle);
+            editedSong.setArtist(newArtist);
+            editedSong.setGenre(newGenre);
+
+
+            songTableView.refresh();
+
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.close();
+        }
+    }
+}

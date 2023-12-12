@@ -1,5 +1,6 @@
 package be;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Song {
@@ -11,12 +12,17 @@ public class Song {
     private String duration;
     private List<Playlist> playlists;
 
+    public Song(){
+        this.playlists=new ArrayList<>();
+    }
+
     public Song(String title, String artist, String genre, String filePath, String duration) {
         this.title = title;
         this.artist = artist;
         this.genre = genre;
         this.filePath = filePath;
         this.duration = duration;
+        this.playlists=new ArrayList<>();
     }
 
     public Song(int id, String title, String artist, String genre, String filePath, String duration) {
@@ -26,6 +32,7 @@ public class Song {
         this.genre = genre;
         this.filePath = filePath;
         this.duration = duration;
+        this.playlists=new ArrayList<>();
     }
 
     public int getId() {

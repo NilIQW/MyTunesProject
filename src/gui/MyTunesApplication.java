@@ -1,5 +1,6 @@
 package gui;
 
+import bll.MyTunesModel;
 import dal.ConnectionManager;
 import gui.controller.MyTunesController;
 import javafx.application.Application;

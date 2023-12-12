@@ -1,6 +1,6 @@
 package gui.controller;
 
-import gui.MyTunesModel;
+import bll.MyTunesModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

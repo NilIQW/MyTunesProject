@@ -1,4 +1,4 @@
-package gui;
+package bll;
 
 import be.Playlist;
 import be.Song;
