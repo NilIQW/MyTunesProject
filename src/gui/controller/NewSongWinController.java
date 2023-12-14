@@ -156,6 +156,8 @@ public class NewSongWinController implements Initializable {
             editedSong.setArtist(newArtist);
             editedSong.setGenre(newGenre);
 
+            System.out.println(songTableView);
+
 
             songTableView.refresh();
 

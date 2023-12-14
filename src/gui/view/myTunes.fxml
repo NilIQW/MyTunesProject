@@ -94,7 +94,7 @@
                         <Insets bottom="3.0" />
                     </VBox.margin>
                 </Label>
-                <ListView fx:id="playlistSongView" prefHeight="380.0" prefWidth="171.0" style="-fx-background-color: #E5DFF6;" />
+                <ListView fx:id="playlistSongsView" prefHeight="380.0" prefWidth="171.0" style="-fx-background-color: #E5DFF6;" />
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <Button mnemonicParsing="false" style="-fx-background-color: #E5DFF6;" text="↑">

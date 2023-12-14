@@ -60,14 +60,7 @@ public class MyTunesController implements Initializable {
         this.model = model;
         playlistView.setItems(model.playlistsProperty());
         initializeSearch();
-    }
-
-    public ListView<Song> getPlaylistSongsView() {
-        return playlistSongsView;
-    }
-
-    public void setPlaylistSongsView(ListView<Song> playlistSongsView) {
-        this.playlistSongsView = playlistSongsView;
+        playlistSongsView.setItems(model.getPlaylistSongs());
     }
 
     public void setSongTableView(TableView<Song> songTableView) {

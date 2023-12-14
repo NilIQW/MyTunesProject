@@ -15,6 +15,7 @@ public class MyTunesModel {
     private MediaPlayer mediaPlayer;
     private ObservableList<Song> songs;
     private ObservableList<Playlist> playlists;
+    private final ObservableList<Song> songsOnPlaylist;
     private final ListProperty<Playlist> playlistsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
     //private final Connection connection;
 
@@ -28,6 +29,7 @@ public class MyTunesModel {
         //this.connection = connection;
         songs = FXCollections.observableArrayList();
         playlists = FXCollections.observableArrayList();
+        songsOnPlaylist = FXCollections.observableArrayList();
     }
 
 
@@ -45,7 +47,7 @@ public class MyTunesModel {
     }
     public void addSongsToThePlaylist(Playlist playlist, List<Song> songsToAdd) {
         playlist.addSongs((Song) songsToAdd);
-        songs.addAll(songsToAdd);
+        songsOnPlaylist.addAll(songsToAdd);
     }
     public void createPlaylist(String playlistName) {
         Playlist newPlaylist = new Playlist(playlistName);
@@ -74,4 +76,7 @@ public class MyTunesModel {
     }
 
 
+    public ObservableList<Song> getPlaylistSongs() {
+        return songsOnPlaylist;
+    }
 }
