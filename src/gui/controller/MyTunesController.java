@@ -29,6 +29,8 @@ import java.util.ResourceBundle;
 
 public class MyTunesController implements Initializable {
     @FXML
+    private ListView<Song> playlistSongsView;
+    @FXML
     private TextField filterTextfield;
     @FXML
     private Button filterButton;
@@ -60,7 +62,13 @@ public class MyTunesController implements Initializable {
         initializeSearch();
     }
 
+    public ListView<Song> getPlaylistSongsView() {
+        return playlistSongsView;
+    }
 
+    public void setPlaylistSongsView(ListView<Song> playlistSongsView) {
+        this.playlistSongsView = playlistSongsView;
+    }
 
     public void setSongTableView(TableView<Song> songTableView) {
         this.songTableView = songTableView;
@@ -298,7 +306,28 @@ public class MyTunesController implements Initializable {
 
 
     public void addSongsToPlaylist(ActionEvent actionEvent) {
+        Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
+        Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
 
+        if (selectedPlaylist != null && selectedSong != null) {
+            selectedPlaylist.addSongs(selectedSong);
+        }
+        List<Song> songsInPlaylist = selectedPlaylist.getSongs();
+
+        playlistSongsView.setItems(FXCollections.observableArrayList(songsInPlaylist));
+
+        if (selectedSong != null && selectedSong.getFilePath() != null && !selectedSong.getFilePath().isEmpty()) {
+            String filePath = selectedSong.getFilePath();
+            Media media = new Media(new File(filePath).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            model.setMediaPlayer(mediaPlayer);
+
+            mediaPlayer.setVolume(volumeSlider.getValue());
+
+            titleColumn.setText(selectedSong.getTitle());
+
+            mediaPlayer.play();
+        }
     }
 
     public void filterTextfield(ActionEvent actionEvent) {

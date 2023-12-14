@@ -21,7 +21,7 @@ public class ConnectionManager {
 
     }
 
-    public Connection getConnection() throws SQLServerException {
+    /*public Connection getConnection() throws SQLServerException {
         return dataSource.getConnection();
     }
 
@@ -32,5 +32,5 @@ public class ConnectionManager {
         connection.close();
 
 
-    }
+    }*/
 }

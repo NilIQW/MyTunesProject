@@ -16,7 +16,7 @@ public class MyTunesModel {
     private ObservableList<Song> songs;
     private ObservableList<Playlist> playlists;
     private final ListProperty<Playlist> playlistsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
-    private final Connection connection;
+    //private final Connection connection;
 
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
@@ -24,8 +24,8 @@ public class MyTunesModel {
     public void setMediaPlayer(MediaPlayer mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
     }
-    public MyTunesModel(Connection connection){
-        this.connection = connection;
+    public MyTunesModel(){
+        //this.connection = connection;
         songs = FXCollections.observableArrayList();
         playlists = FXCollections.observableArrayList();
     }

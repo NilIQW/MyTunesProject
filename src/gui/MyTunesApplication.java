@@ -16,13 +16,13 @@ public class MyTunesApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ConnectionManager connectionManager = new ConnectionManager();
-        Connection connection = connectionManager.getConnection();
+        //Connection connection = connectionManager.getConnection();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/myTunes.fxml"));
         Parent root = loader.load();
         MyTunesController myTunesController = loader.getController();
 
-        myTunesController.setModel(new MyTunesModel(connection));
+        myTunesController.setModel(new MyTunesModel());
         myTunesController.setSongTableView(myTunesController.getSongTableView());
 
         Scene scene = new Scene(root);
