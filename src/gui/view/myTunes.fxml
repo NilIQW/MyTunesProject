@@ -20,13 +20,13 @@
             <children>
                 <AnchorPane prefHeight="178.0" prefWidth="557.0">
                     <children>
-                        <Button layoutX="175.0" layoutY="91.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="35.0" style="-fx-background-radius: 16; -fx-background-color: #E5DFF6;" text="◃◃" />
+                        <Button fx:id="previous" layoutX="175.0" layoutY="91.0" mnemonicParsing="false" onAction="#playPrevious" prefHeight="33.0" prefWidth="35.0" style="-fx-background-radius: 16; -fx-background-color: #E5DFF6;" text="◃◃" />
                         <Button fx:id="play" layoutX="219.0" layoutY="86.0" mnemonicParsing="false" onAction="#play" prefHeight="43.0" prefWidth="45.0" style="-fx-background-radius: 36; -fx-background-color: #E5DFF6;" text="▶">
                      <font>
                         <Font size="21.0" />
                      </font>
                   </Button>
-                        <Button layoutX="325.0" layoutY="91.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="35.0" style="-fx-background-color: #E5DFF6; -fx-background-radius: 16;" text="▹▹" />
+                        <Button fx:id="next" layoutX="325.0" layoutY="91.0" mnemonicParsing="false" onAction="#playNext" prefHeight="33.0" prefWidth="35.0" style="-fx-background-color: #E5DFF6; -fx-background-radius: 16;" text="▹▹" />
                         <Slider fx:id="volumeSlider" layoutX="210.0" layoutY="146.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="16.0" prefWidth="148.0" style="-fx-background-color: #C9BFE5;" value="1.0" />
                         <Label layoutX="181.0" layoutY="142.0" text="🔊">
                             <font>

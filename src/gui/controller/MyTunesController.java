@@ -55,11 +55,10 @@ public class MyTunesController implements Initializable {
     private ObservableList<Song> allSongs;
     private ObservableList<Song> filteredSongs;
     private VolumeSlider volumeSliderManager;
-
+    private int currentSongIndex=-1;
     public void setModel(MyTunesModel model) {
         this.model = model;
         playlistView.setItems(model.playlistsProperty());
-        initializeSearch();
         playlistSongsView.setItems(model.getPlaylistSongs());
     }
 
@@ -192,10 +191,13 @@ public class MyTunesController implements Initializable {
 
 
     public void playSelectedSong() {
-        Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
+       Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
         if (selectedSong != null && selectedSong.getFilePath() != null && !selectedSong.getFilePath().isEmpty()) {
             String filePath = selectedSong.getFilePath();
             Media media = new Media(new File(filePath).toURI().toString());
+
+            stopCurrentPlayback();
+
             mediaPlayer = new MediaPlayer(media);
             model.setMediaPlayer(mediaPlayer);
 
@@ -205,6 +207,11 @@ public class MyTunesController implements Initializable {
 
             mediaPlayer.play();
 
+        }
+    }
+    private void stopCurrentPlayback() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
         }
     }
 
@@ -243,13 +250,6 @@ public class MyTunesController implements Initializable {
 
         filteredSongs = FXCollections.observableArrayList();
     }
-    public void initializeSearch() {
-        if (model != null) {
-            allSongs = FXCollections.observableArrayList(model.getSongs());
-            filteredSongs = FXCollections.observableArrayList(allSongs);
-            songTableView.setItems(filteredSongs);
-        }
-    }
     public void close(ActionEvent actionEvent) {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
@@ -261,17 +261,10 @@ public class MyTunesController implements Initializable {
             model.removeSongs(selectedSongs);
         }
     }
-
-
     public void DeleteSong(ActionEvent actionEvent) {
         deleteSongs();
         initializeSongTable();
     }
-
-    public void DeletePSong(ActionEvent actionEvent) {
-
-    }
-
     public void DeletePlaylist(ActionEvent actionEvent) {
         Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
         if (selectedPlaylist != null) {
@@ -294,10 +287,6 @@ public class MyTunesController implements Initializable {
             });
         }
     }
-
-
-
-
     public void addSongsToPlaylist(ActionEvent actionEvent) {
         Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
         Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
@@ -319,30 +308,32 @@ public class MyTunesController implements Initializable {
 
             titleColumn.setText(selectedSong.getTitle());
 
-            mediaPlayer.play();
+        }
+    }
+    public void filterButton(ActionEvent actionEvent) {
+        String searchTerm = filterTextfield.getText().trim().toLowerCase();
+        if (searchTerm.isEmpty()) {
+            songTableView.setItems(model.getSongs());
+        } else {
+            filteredSongs = model.getSongs().filtered(song ->
+                    song.getTitle().toLowerCase().contains(searchTerm) ||
+                            song.getArtist().toLowerCase().contains(searchTerm) ||
+                            song.getGenre().toLowerCase().contains(searchTerm)
+            );
+            songTableView.setItems(filteredSongs);
+
         }
     }
 
     public void filterTextfield(ActionEvent actionEvent) {
     }
+    public void DeletePSong(ActionEvent actionEvent) {
 
-    public void filterButton(ActionEvent actionEvent) {
-        if (allSongs == null) {
-            return;
-        }
-        String filterText = filterTextfield.getText().toLowerCase().trim();
-        try {
-            List<Song> filteredList = Filter.filterSongs(allSongs, filterText);
-
-            if (filteredList != null) {
-                filteredSongs.setAll(filteredList);
-                songTableView.setItems(filteredSongs);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
+    public void playNext(ActionEvent actionEvent) {
 
+    }
+    public void playPrevious(ActionEvent actionEvent) {
 
-
+    }
 }
