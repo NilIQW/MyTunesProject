@@ -44,30 +44,15 @@ public class NewSongWinController implements Initializable {
     public void setMyTunesController(MyTunesController myTunesController) {
         this.myTunesController = myTunesController;
     }
-
     public void setNewSongWindow(Stage newSongWindow) {
         this.newSongWindow = newSongWindow;
     }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        chooseSongbtn(new ActionEvent());
         populateChoicebox();
     }
-
     public void setEditedSong(Song editedSong) {
         this.editedSong = editedSong;
-        setSongFields(editedSong);
-    }
-
-    public Song getEditedSong() {
-        return editedSong;
-    }
-
-    private void setSongFields(Song song) {
-        titleTextfield.setText(song.getTitle());
-        artistTextfield.setText(song.getArtist());
-        genreChoicebox.setValue(song.getGenre());
 
     }
 
@@ -84,11 +69,8 @@ public class NewSongWinController implements Initializable {
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                 stage.close();
             }
-
         }
-
     }
-
     private void loadSongs(List<File> songFiles) {
         if (model != null) {
             for (File file : songFiles) {
@@ -96,7 +78,6 @@ public class NewSongWinController implements Initializable {
 
                 Media media = new Media(new File(filePath).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(media);
-
 
                 mediaPlayer.setOnReady(() -> {
                     String duration = formatDuration(media.getDuration());
@@ -108,56 +89,39 @@ public class NewSongWinController implements Initializable {
 
                     mediaPlayer.setOnEndOfMedia(mediaPlayer::dispose);
                 });
-
             }
-
-
         }
-
     }
-
     private String formatDuration(Duration duration) {
         long minutes = (long) duration.toMinutes();
         long seconds = (long) (duration.toSeconds() % 60);
         return String.format("%02d:%02d", minutes, seconds);
     }
-
     public void setMyTunesModel(MyTunesModel model) {
         this.model = model;
     }
-
     public void populateChoicebox() {
         ObservableList<String> genres = FXCollections.observableArrayList("Pop", "Rock", "Country", "Hip Hop");
         genreChoicebox.setItems(genres);
         genreChoicebox.setValue("Pop");
     }
-
     public void done(ActionEvent actionEvent) {
-
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
     }
-
-
     public void setSongTableView(TableView<Song> songTableView) {
         this.songTableView = songTableView;
     }
-
-
     public void Save(ActionEvent actionEvent) {
         if (editedSong != null) {
             String newTitle = titleTextfield.getText();
             String newArtist = artistTextfield.getText();
             String newGenre = genreChoicebox.getValue();
 
-
             editedSong.setTitle(newTitle);
             editedSong.setArtist(newArtist);
             editedSong.setGenre(newGenre);
-
-            System.out.println(songTableView);
-
 
             songTableView.refresh();
 

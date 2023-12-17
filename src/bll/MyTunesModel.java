@@ -13,12 +13,11 @@ import java.util.List;
 
 public class MyTunesModel {
     private MediaPlayer mediaPlayer;
-    private ObservableList<Song> songs;
-    private ObservableList<Playlist> playlists;
+    private final ObservableList<Song> songs;
+    private final ObservableList<Playlist> playlists;
     private final ObservableList<Song> songsOnPlaylist;
     private final ListProperty<Playlist> playlistsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
     //private final Connection connection;
-
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
@@ -31,16 +30,12 @@ public class MyTunesModel {
         playlists = FXCollections.observableArrayList();
         songsOnPlaylist = FXCollections.observableArrayList();
     }
-
-
     public ObservableList<Song> getSongs(){
         return songs;
     }
-
     public void addSongs(Song song) {
         songs.add(song);
     }
-
     public void removeSongs(List<Song> songsToRemove){
         songs.removeAll(songsToRemove);
 
@@ -58,19 +53,8 @@ public class MyTunesModel {
     }
 
     public void removePlaylist(Playlist selectedPlaylist) {
-        System.out.println("Attempting to remove playlist: " + selectedPlaylist.getName());
-        playlists.removeIf(playlist -> {
-            boolean shouldRemove = playlist.equals(selectedPlaylist);
-            if (shouldRemove) {
-                System.out.println("Removed playlist: " + playlist.getName());
-            }
-            return shouldRemove;
-        });
+        playlists.remove(selectedPlaylist);
     }
-    public void updatePlaylist(Playlist playlist, String newName) {
-        playlist.setName(newName);
-    }
-
 
     public ObservableList<Song> getPlaylistSongs() {
         return songsOnPlaylist;

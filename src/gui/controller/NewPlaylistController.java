@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class NewPlaylistController implements Initializable {
+public class NewPlaylistController{
     private Stage newSongWin;
     @FXML
     private TextField playlistTextfield;
@@ -46,15 +46,9 @@ public class NewPlaylistController implements Initializable {
     public void setNewSongWin(Stage stage){
         this.newSongWin=stage;
     }
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
     public void cancelBtn(ActionEvent actionEvent) {
         Node source = (Node) actionEvent.getSource();
-
         Stage stage = (Stage) source.getScene().getWindow();
-
         stage.close();
     }
 
