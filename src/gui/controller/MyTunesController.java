@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -49,13 +48,8 @@ public class MyTunesController implements Initializable {
     @FXML
     public TableColumn<Song, String> genreColumn;
     private MyTunesModel model;
-    @FXML
-    private Slider volumeSlider;
     private MediaPlayer mediaPlayer;
-    private ObservableList<Song> allSongs;
     private ObservableList<Song> filteredSongs;
-    private VolumeSlider volumeSliderManager;
-    private int currentSongIndex=-1;
     public void setModel(MyTunesModel model) {
         this.model = model;
         playlistView.setItems(model.playlistsProperty());
@@ -128,11 +122,6 @@ public class MyTunesController implements Initializable {
             }
         }
     }
-
-    public void editPlaylist(ActionEvent actionEvent) {
-
-    }
-
     public void openNewSongWin(ActionEvent actionEvent) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newSongWin.fxml"));
@@ -187,9 +176,9 @@ public class MyTunesController implements Initializable {
             e.printStackTrace();
         }
     }
-
-
-
+    public void play(ActionEvent actionEvent) {
+        playSelectedSong();
+    }
     public void playSelectedSong() {
        Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
         if (selectedSong != null && selectedSong.getFilePath() != null && !selectedSong.getFilePath().isEmpty()) {
@@ -200,8 +189,6 @@ public class MyTunesController implements Initializable {
 
             mediaPlayer = new MediaPlayer(media);
             model.setMediaPlayer(mediaPlayer);
-
-            mediaPlayer.setVolume(volumeSlider.getValue());
 
             titleColumn.setText(selectedSong.getTitle());
 
@@ -214,22 +201,12 @@ public class MyTunesController implements Initializable {
             mediaPlayer.stop();
         }
     }
-
-    public void pausePlayback() {
+    public void pauseBtn(ActionEvent actionEvent) {
         MediaPlayer mediaPlayer = model.getMediaPlayer();
         if (mediaPlayer != null) {
             mediaPlayer.pause();
         }
     }
-
-    public void play(ActionEvent actionEvent) {
-        playSelectedSong();
-    }
-
-    public void pauseBtn(ActionEvent actionEvent) {
-        pausePlayback();
-    }
-
     private void initializeSongTable() {
         ObservableList<Song> songs = FXCollections.observableArrayList();
         songTableView.setItems(songs);
@@ -237,17 +214,10 @@ public class MyTunesController implements Initializable {
             songs.addAll(model.getSongs());
         }
     }
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTableColumns();
         initializeSongTable();
-
-        if (volumeSlider != null && mediaPlayer != null) {
-            volumeSliderManager = new VolumeSlider(volumeSlider, mediaPlayer);
-        }
-
         filteredSongs = FXCollections.observableArrayList();
     }
     public void close(ActionEvent actionEvent) {
@@ -255,15 +225,13 @@ public class MyTunesController implements Initializable {
         stage.close();
     }
 
-    public void deleteSongs() {
+    public void DeleteSong(ActionEvent actionEvent) {
         ObservableList<Song> selectedSongs = songTableView.getSelectionModel().getSelectedItems();
         if (!selectedSongs.isEmpty()) {
             model.removeSongs(selectedSongs);
         }
-    }
-    public void DeleteSong(ActionEvent actionEvent) {
-        deleteSongs();
-        initializeSongTable();
+        songTableView.setItems(model.getSongs());
+
     }
     public void DeletePlaylist(ActionEvent actionEvent) {
         Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
@@ -298,17 +266,6 @@ public class MyTunesController implements Initializable {
 
         playlistSongsView.setItems(FXCollections.observableArrayList(songsInPlaylist));
 
-        if (selectedSong != null && selectedSong.getFilePath() != null && !selectedSong.getFilePath().isEmpty()) {
-            String filePath = selectedSong.getFilePath();
-            Media media = new Media(new File(filePath).toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-            model.setMediaPlayer(mediaPlayer);
-
-            mediaPlayer.setVolume(volumeSlider.getValue());
-
-            titleColumn.setText(selectedSong.getTitle());
-
-        }
     }
     public void filterButton(ActionEvent actionEvent) {
         String searchTerm = filterTextfield.getText().trim().toLowerCase();
@@ -317,8 +274,7 @@ public class MyTunesController implements Initializable {
         } else {
             filteredSongs = model.getSongs().filtered(song ->
                     song.getTitle().toLowerCase().contains(searchTerm) ||
-                            song.getArtist().toLowerCase().contains(searchTerm) ||
-                            song.getGenre().toLowerCase().contains(searchTerm)
+                            song.getArtist().toLowerCase().contains(searchTerm)
             );
             songTableView.setItems(filteredSongs);
 
@@ -355,7 +311,7 @@ public class MyTunesController implements Initializable {
     public void playPrevious(ActionEvent actionEvent) {
         int selectedIndex = songTableView.getSelectionModel().getSelectedIndex();
 
-        if(selectedIndex <songTableView.getItems().size()-1){
+        if(selectedIndex > 0){
             int prevIndex = selectedIndex - 1;
 
             songTableView.getSelectionModel().select(prevIndex);
