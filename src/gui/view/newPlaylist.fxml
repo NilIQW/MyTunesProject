@@ -5,11 +5,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="219.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NewPlaylistController">
+<AnchorPane prefHeight="219.0" prefWidth="399.0" style="-fx-background-color: #7EA6DF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NewPlaylistController">
    <children>
       <Label layoutX="61.0" layoutY="85.0" text="Name:" />
-      <TextField fx:id="playlistTextfield" layoutX="104.0" layoutY="81.0" prefHeight="26.0" prefWidth="223.0" />
-      <Button fx:id="cancel" layoutX="189.0" layoutY="128.0" mnemonicParsing="false" onAction="#cancelBtn" text="Cancel" />
-      <Button fx:id="saveBtn" layoutX="273.0" layoutY="128.0" mnemonicParsing="false" onAction="#savePlaylist" text="Save" />
+      <TextField fx:id="playlistTextfield" layoutX="104.0" layoutY="81.0" prefHeight="26.0" prefWidth="223.0" style="-fx-background-color: #BAD6FF;" />
+      <Button fx:id="cancel" layoutX="189.0" layoutY="128.0" mnemonicParsing="false" onAction="#cancelBtn" style="-fx-background-color: #BAD6FF;" text="Cancel" />
+      <Button fx:id="saveBtn" layoutX="273.0" layoutY="128.0" mnemonicParsing="false" onAction="#savePlaylist" style="-fx-background-color: #BAD6FF;" text="Save" />
    </children>
 </AnchorPane>

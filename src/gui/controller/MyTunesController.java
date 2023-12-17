@@ -38,15 +38,17 @@ public class MyTunesController implements Initializable {
     @FXML
     private TableView<Song> songTableView;
     @FXML
-    public TableColumn<Song, String> durationColumn;
+    private TableColumn<Song, String> durationColumn;
     @FXML
-    public TableColumn<Song, String> idColumn;
+    private TableColumn<Song, String> idColumn;
     @FXML
-    public TableColumn<Song, String> titleColumn;
+    private TableColumn<Song, String> titleColumn;
     @FXML
-    public TableColumn<Song, String> artistColumn;
+    private TableColumn<Song, String> artistColumn;
     @FXML
     public TableColumn<Song, String> genreColumn;
+    @FXML
+    private Label titleLabel;
     private MyTunesModel model;
     private MediaPlayer mediaPlayer;
     private ObservableList<Song> filteredSongs;
@@ -192,6 +194,8 @@ public class MyTunesController implements Initializable {
 
             titleColumn.setText(selectedSong.getTitle());
 
+            titleLabel.setText(selectedSong.getTitle());
+
             mediaPlayer.play();
 
         }
@@ -219,6 +223,10 @@ public class MyTunesController implements Initializable {
         setupTableColumns();
         initializeSongTable();
         filteredSongs = FXCollections.observableArrayList();
+
+        playlistView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            updatePlaylistSongsView(newVal);
+        });
     }
     public void close(ActionEvent actionEvent) {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -353,4 +361,14 @@ public class MyTunesController implements Initializable {
             playlistSongsView.getSelectionModel().select(selectedIndex + 1);
         }
     }
+    public void updatePlaylistSongsView(Playlist selectedPlaylist) {
+        if (selectedPlaylist != null) {
+            List<Song> songsInPlaylist = selectedPlaylist.getSongs();
+            playlistSongsView.setItems(FXCollections.observableArrayList(songsInPlaylist));
+        } else {
+            // Clear the playlistSongsView if no playlist is selected
+            playlistSongsView.getItems().clear();
+        }
+    }
+
 }

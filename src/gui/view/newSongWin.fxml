@@ -8,21 +8,21 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NewSongWinController">
     <children>
-        <AnchorPane prefHeight="400.0" prefWidth="601.0" style="-fx-background-color: #C9BFE5;">
+        <AnchorPane prefHeight="400.0" prefWidth="601.0" style="-fx-background-color: #7EA6DF;">
             <children>
                 <Label layoutX="142.0" layoutY="122.0" text="Title:" />
-                <TextField fx:id="titleTextfield" layoutX="203.0" layoutY="117.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #E5DFF6;" />
+                <TextField fx:id="titleTextfield" layoutX="203.0" layoutY="117.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #BAD6FF;" />
                 <Label layoutX="139.0" layoutY="163.0" text="Artist:" />
-                <TextField fx:id="artistTextfield" layoutX="203.0" layoutY="158.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #E5DFF6;" />
+                <TextField fx:id="artistTextfield" layoutX="203.0" layoutY="158.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #BAD6FF;" />
                 <Label layoutX="133.0" layoutY="205.0" text="Genre:" />
                 <Label layoutX="140.0" layoutY="245.0" text="Time:" />
                 <Label layoutX="146.0" layoutY="288.0" text="File:" />
-                <TextField fx:id="timeTextfield" layoutX="203.0" layoutY="240.0" prefHeight="26.0" prefWidth="108.0" style="-fx-background-color: #E5DFF6;" />
-                <TextField layoutX="203.0" layoutY="283.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #E5DFF6;" />
-                <Button fx:id="chooseSong" layoutX="434.0" layoutY="282.0" mnemonicParsing="false" onAction="#chooseSongbtn" style="-fx-background-color: #E5DFF6;" text="Choose..." />
-            <ChoiceBox fx:id="genreChoicebox" layoutX="203.0" layoutY="200.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #E5DFF6;" />
-            <Button fx:id="doneBtn" layoutX="356.0" layoutY="340.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#done" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #E5DFF6;" text="Done" />
-            <Button fx:id="saveBtn" layoutX="434.0" layoutY="340.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#Save" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #E5DFF6;" text="Save" />
+                <TextField fx:id="timeTextfield" layoutX="203.0" layoutY="240.0" prefHeight="26.0" prefWidth="108.0" style="-fx-background-color: #BAD6FF;" />
+                <TextField layoutX="203.0" layoutY="283.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #BAD6FF;" />
+                <Button fx:id="chooseSong" layoutX="434.0" layoutY="282.0" mnemonicParsing="false" onAction="#chooseSongbtn" style="-fx-background-color: #BAD6FF;" text="Choose..." />
+            <ChoiceBox fx:id="genreChoicebox" layoutX="203.0" layoutY="200.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #BAD6FF;" />
+            <Button fx:id="doneBtn" layoutX="356.0" layoutY="340.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#done" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #BAD6FF;" text="Done" />
+            <Button fx:id="saveBtn" layoutX="434.0" layoutY="340.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#Save" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #BAD6FF;" text="Save" />
             </children>
         </AnchorPane>
     </children>
