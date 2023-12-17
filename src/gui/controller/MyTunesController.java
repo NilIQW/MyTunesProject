@@ -49,6 +49,8 @@ public class MyTunesController implements Initializable {
     public TableColumn<Song, String> genreColumn;
     @FXML
     private Label titleLabel;
+    @FXML
+    private Slider volumeSlider;
     private MyTunesModel model;
     private MediaPlayer mediaPlayer;
     private ObservableList<Song> filteredSongs;
@@ -227,6 +229,16 @@ public class MyTunesController implements Initializable {
         playlistView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updatePlaylistSongsView(newVal);
         });
+        volumeSlider.setValue(50); // Set an initial volume value
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            adjustVolume(newValue.doubleValue() / 100.0); // Convert to a value between 0 and 1
+        });
+    }
+
+    private void adjustVolume(double volume) {
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(volume);
+        }
     }
     public void close(ActionEvent actionEvent) {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
