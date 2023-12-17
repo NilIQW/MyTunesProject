@@ -338,9 +338,29 @@ public class MyTunesController implements Initializable {
         }
     }
     public void playNext(ActionEvent actionEvent) {
+        int selectedIndex = songTableView.getSelectionModel().getSelectedIndex();
 
+        // Check if there is a next song
+        if (selectedIndex < songTableView.getItems().size() - 1) {
+            // Increment the index to get the next song
+            int nextIndex = selectedIndex + 1;
+
+            // Select the next song in the table view
+            songTableView.getSelectionModel().select(nextIndex);
+
+            // Play the selected song
+            playSelectedSong();
+        }
     }
     public void playPrevious(ActionEvent actionEvent) {
+        int selectedIndex = songTableView.getSelectionModel().getSelectedIndex();
 
+        if(selectedIndex <songTableView.getItems().size()-1){
+            int prevIndex = selectedIndex - 1;
+
+            songTableView.getSelectionModel().select(prevIndex);
+
+            playSelectedSong();
+        }
     }
 }
