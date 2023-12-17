@@ -5,9 +5,13 @@ import be.Song;
 import java.util.List;
 
 public interface ISongDAO {
-    public Song getSong(int id);
-    public void deleteSong(int id);
-    public void updateSong(Song song);
-    public void createSong(Song song);
-    public List<Song> getAllSongs();
+    Song getSong(int id);
+
+    void addSong(Song song);
+
+    void updateSong(Song song);
+
+    void deleteSong(int id);
+
+    List<Song> getAllSongs();
 }

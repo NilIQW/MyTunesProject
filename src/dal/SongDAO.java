@@ -1,4 +1,4 @@
-package dal;
+/*package dal;
 
 import be.Song;
 
@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongDAO {/*
+public class SongDAO implements ISongDAO {
     private final ConnectionManager connectionManager = new ConnectionManager();
 
     public Song getSong(int id) {
@@ -124,5 +124,5 @@ public class SongDAO {/*
         } catch (SQLException e) {
             throw new RuntimeException("Error getting all songs from the database", e);
         }
-    }*/
-}
+    }
+}*/

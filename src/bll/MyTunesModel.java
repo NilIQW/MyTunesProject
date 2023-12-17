@@ -45,10 +45,6 @@ public class MyTunesModel {
         songs.removeAll(songsToRemove);
 
     }
-    public void addSongsToThePlaylist(Playlist playlist, List<Song> songsToAdd) {
-        playlist.addSongs((Song) songsToAdd);
-        songsOnPlaylist.addAll(songsToAdd);
-    }
     public void createPlaylist(String playlistName) {
         Playlist newPlaylist = new Playlist(playlistName);
         playlists.add(newPlaylist);

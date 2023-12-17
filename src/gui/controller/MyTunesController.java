@@ -325,10 +325,17 @@ public class MyTunesController implements Initializable {
         }
     }
 
-    public void filterTextfield(ActionEvent actionEvent) {
-    }
     public void DeletePSong(ActionEvent actionEvent) {
+        Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
+        Song selectedSong = playlistSongsView.getSelectionModel().getSelectedItem();
 
+        if (selectedPlaylist != null && selectedSong != null) {
+            // Remove the selected song from the playlist
+            selectedPlaylist.removeSong(selectedSong);
+
+            // Update the playlistSongsView with the updated list of songs
+            playlistSongsView.setItems(FXCollections.observableArrayList(selectedPlaylist.getSongs()));
+        }
     }
     public void playNext(ActionEvent actionEvent) {
 

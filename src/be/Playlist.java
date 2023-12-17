@@ -51,4 +51,9 @@ public class Playlist {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+    public void removeSong(Song song) {
+        songs.remove(song);
+
+    }
 }
