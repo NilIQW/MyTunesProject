@@ -97,11 +97,11 @@
                 <ListView fx:id="playlistSongsView" prefHeight="380.0" prefWidth="171.0" style="-fx-background-color: #E5DFF6;" />
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #E5DFF6;" text="↑">
+                        <Button mnemonicParsing="false" onAction="#moveUp" style="-fx-background-color: #E5DFF6;" text="↑">
                             <HBox.margin>
                                 <Insets right="5.0" top="3.0" />
                             </HBox.margin></Button>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #E5DFF6;" text="↓">
+                        <Button mnemonicParsing="false" onAction="#moveDown" style="-fx-background-color: #E5DFF6;" text="↓">
                             <HBox.margin>
                                 <Insets left="5.0" right="5.0" top="3.0" />
                             </HBox.margin></Button>

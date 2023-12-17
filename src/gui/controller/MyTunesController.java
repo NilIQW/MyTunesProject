@@ -319,4 +319,38 @@ public class MyTunesController implements Initializable {
             playSelectedSong();
         }
     }
+
+    public void moveUp(ActionEvent actionEvent) {
+        Song selectedSong = playlistSongsView.getSelectionModel().getSelectedItem();
+        ObservableList<Song> songsInPlaylist = playlistSongsView.getItems();
+
+        int selectedIndex = songsInPlaylist.indexOf(selectedSong);
+
+        if (selectedIndex > 0) {
+            // Swap the selected song with the one above it
+            Song aboveSong = songsInPlaylist.get(selectedIndex - 1);
+            songsInPlaylist.set(selectedIndex - 1, selectedSong);
+            songsInPlaylist.set(selectedIndex, aboveSong);
+
+            // Select the moved song in the playlistSongsView
+            playlistSongsView.getSelectionModel().select(selectedIndex - 1);
+        }
+    }
+
+    public void moveDown(ActionEvent actionEvent) {
+        Song selectedSong = playlistSongsView.getSelectionModel().getSelectedItem();
+        ObservableList<Song> songsInPlaylist = playlistSongsView.getItems();
+
+        int selectedIndex = songsInPlaylist.indexOf(selectedSong);
+
+        if (selectedIndex < songsInPlaylist.size() - 1) {
+            // Swap the selected song with the one below it
+            Song belowSong = songsInPlaylist.get(selectedIndex + 1);
+            songsInPlaylist.set(selectedIndex + 1, selectedSong);
+            songsInPlaylist.set(selectedIndex, belowSong);
+
+            // Select the moved song in the playlistSongsView
+            playlistSongsView.getSelectionModel().select(selectedIndex + 1);
+        }
+    }
 }
