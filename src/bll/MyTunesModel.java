@@ -2,6 +2,9 @@ package bll;
 
 import be.Playlist;
 import be.Song;
+import dal.ConnectionManager;
+import dal.ISongDAO;
+import dal.SongDAO;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -17,19 +20,45 @@ public class MyTunesModel {
     private final ObservableList<Playlist> playlists;
     private final ObservableList<Song> songsOnPlaylist;
     private final ListProperty<Playlist> playlistsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
-    //private final Connection connection;
+    private final Connection connection;
+    private final ISongDAO songDAO= new SongDAO(new ConnectionManager());
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
     public void setMediaPlayer(MediaPlayer mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
     }
-    public MyTunesModel(){
-        //this.connection = connection;
+
+    public MyTunesModel(Connection connection){
+        this.connection = connection;
         songs = FXCollections.observableArrayList();
         playlists = FXCollections.observableArrayList();
         songsOnPlaylist = FXCollections.observableArrayList();
+
+        loadSongsFromDatabase();
     }
+
+    private final ListProperty<Song> songsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
+
+    public ListProperty<Song> songsProperty() {
+        return songsProperty;
+    }
+
+    private void loadSongsFromDatabase() {
+        try {
+            List<Song> songsFromDatabase = songDAO.getAllSongs();
+            songs.addAll(songsFromDatabase);
+
+            // Update the property, triggering any listeners
+            songsProperty.set(FXCollections.observableArrayList(songs));
+        } catch (Exception e) {
+            // Handle exceptions appropriately
+            e.printStackTrace();
+        }
+    }
+
+
+
     public ObservableList<Song> getSongs(){
         return songs;
     }
@@ -59,4 +88,6 @@ public class MyTunesModel {
     public ObservableList<Song> getPlaylistSongs() {
         return songsOnPlaylist;
     }
+
+
 }

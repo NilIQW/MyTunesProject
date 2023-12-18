@@ -3,6 +3,10 @@ package gui.controller;
 import be.Playlist;
 import be.Song;
 import bll.MyTunesModel;
+import bll.SongManager;
+import dal.ConnectionManager;
+import dal.ISongDAO;
+import dal.SongDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -46,7 +50,7 @@ public class MyTunesController implements Initializable {
     @FXML
     private TableColumn<Song, String> artistColumn;
     @FXML
-    public TableColumn<Song, String> genreColumn;
+    private TableColumn<Song, String> genreColumn;
     @FXML
     private Label titleLabel;
     @FXML
@@ -54,10 +58,21 @@ public class MyTunesController implements Initializable {
     private MyTunesModel model;
     private MediaPlayer mediaPlayer;
     private ObservableList<Song> filteredSongs;
+    private SongManager mySongManager;
+    public MyTunesController(){
+
+        this.mySongManager = new SongManager(new SongDAO(new ConnectionManager()) {
+        });
+    }
     public void setModel(MyTunesModel model) {
         this.model = model;
         playlistView.setItems(model.playlistsProperty());
         playlistSongsView.setItems(model.getPlaylistSongs());
+        songTableView.itemsProperty().bind(model.songsProperty());
+    }
+
+    public void setSongManager(SongManager mySongManager) {
+        this.mySongManager = mySongManager;
     }
 
     public void setSongTableView(TableView<Song> songTableView) {
@@ -127,15 +142,14 @@ public class MyTunesController implements Initializable {
         }
     }
     public void openNewSongWin(ActionEvent actionEvent) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newSongWin.fxml"));
+        try {FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newSongWin.fxml"));
             Parent root = loader.load();
 
             NewSongWinController newSongWinController = loader.getController();
+            newSongWinController.setMyTunesController(this);
+            newSongWinController.setMySongManager(mySongManager);
             newSongWinController.setMyTunesModel(model);
             newSongWinController.setSongTableView(songTableView);
-
-            newSongWinController.setMyTunesController(this);
             newSongWinController.setNewSongWindow(new Stage());
 
             Stage stage = new Stage();
@@ -151,6 +165,7 @@ public class MyTunesController implements Initializable {
         }
     }
 
+
     @FXML
     public void editBtn(ActionEvent actionEvent) {
         try {
@@ -158,6 +173,7 @@ public class MyTunesController implements Initializable {
             Parent root = loader.load();
 
             NewSongWinController newSongWinController = loader.getController();
+            newSongWinController.setMySongManager(mySongManager);
             newSongWinController.setMyTunesModel(model);
             newSongWinController.setSongTableView(songTableView);
 
@@ -216,10 +232,8 @@ public class MyTunesController implements Initializable {
     private void initializeSongTable() {
         ObservableList<Song> songs = FXCollections.observableArrayList();
         songTableView.setItems(songs);
-        if (model != null) {
-            songs.addAll(model.getSongs());
-        }
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTableColumns();
@@ -229,11 +243,16 @@ public class MyTunesController implements Initializable {
         playlistView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updatePlaylistSongsView(newVal);
         });
+
+
         volumeSlider.setValue(50); // Set an initial volume value
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             adjustVolume(newValue.doubleValue() / 100.0); // Convert to a value between 0 and 1
         });
+
     }
+
+
 
     private void adjustVolume(double volume) {
         if (mediaPlayer != null) {
@@ -245,13 +264,15 @@ public class MyTunesController implements Initializable {
         stage.close();
     }
 
-    public void DeleteSong(ActionEvent actionEvent) {
+    public void deleteSong(ActionEvent actionEvent) {
         ObservableList<Song> selectedSongs = songTableView.getSelectionModel().getSelectedItems();
         if (!selectedSongs.isEmpty()) {
-            model.removeSongs(selectedSongs);
+            for (Song song : selectedSongs) {
+                mySongManager.deleteSong(song.getId());
+                model.removeSongs(selectedSongs);
+            }
         }
         songTableView.setItems(model.getSongs());
-
     }
     public void DeletePlaylist(ActionEvent actionEvent) {
         Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
@@ -373,7 +394,7 @@ public class MyTunesController implements Initializable {
             playlistSongsView.getSelectionModel().select(selectedIndex + 1);
         }
     }
-    public void updatePlaylistSongsView(Playlist selectedPlaylist) {
+    public void updatePlaylistSongsView(Playlist selectedPlaylist) {//this code is to show the songs inside the selected playlist
         if (selectedPlaylist != null) {
             List<Song> songsInPlaylist = selectedPlaylist.getSongs();
             playlistSongsView.setItems(FXCollections.observableArrayList(songsInPlaylist));

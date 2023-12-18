@@ -2,6 +2,7 @@ package gui.controller;
 
 import be.Song;
 import bll.MyTunesModel;
+import bll.SongManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,6 +42,12 @@ public class NewSongWinController implements Initializable {
     public MyTunesController myTunesController;
     private Song editedSong;
 
+    private SongManager mySongManager;
+
+    public void setMySongManager(SongManager mySongManager) {
+        this.mySongManager = mySongManager;
+    }
+
     public void setMyTunesController(MyTunesController myTunesController) {
         this.myTunesController = myTunesController;
     }
@@ -57,22 +64,22 @@ public class NewSongWinController implements Initializable {
     }
 
     public void chooseSongbtn(ActionEvent actionEvent) {
-        if (songTableView != null) {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Choose songs");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Music Files", "*.mp3", "*.wav"));
-            List<File> selectedFiles = fileChooser.showOpenMultipleDialog(songTableView.getScene().getWindow());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose songs");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Music Files", "*.mp3", "*.wav"));
+        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(songTableView.getScene().getWindow());
 
-            if (selectedFiles != null) {
-                loadSongs(selectedFiles);
+        if (selectedFiles != null) {
+            loadSongs(selectedFiles);
 
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                stage.close();
-            }
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.close();
         }
     }
+
+
     private void loadSongs(List<File> songFiles) {
-        if (model != null) {
+        if (model != null && mySongManager != null) {
             for (File file : songFiles) {
                 String filePath = file.getAbsolutePath();
 
@@ -83,15 +90,21 @@ public class NewSongWinController implements Initializable {
                     String duration = formatDuration(media.getDuration());
                     Song newSong = new Song(file.getName(), artistTextfield.getText(), genreChoicebox.getValue(), filePath, duration);
                     model.addSongs(newSong);
+                    mySongManager.addSong(newSong);
 
-                    ObservableList<Song> updatedSongs = FXCollections.observableArrayList(model.getSongs());
-                    songTableView.setItems(updatedSongs);
 
-                    mediaPlayer.setOnEndOfMedia(mediaPlayer::dispose);
+                    songTableView.setItems(model.getSongs());
+
+
+                    mediaPlayer.setOnEndOfMedia(() -> {
+                        mediaPlayer.stop();
+                        mediaPlayer.dispose();
+                    });
                 });
             }
         }
     }
+
     private String formatDuration(Duration duration) {
         long minutes = (long) duration.toMinutes();
         long seconds = (long) (duration.toSeconds() % 60);
@@ -113,7 +126,7 @@ public class NewSongWinController implements Initializable {
     public void setSongTableView(TableView<Song> songTableView) {
         this.songTableView = songTableView;
     }
-    public void Save(ActionEvent actionEvent) {
+    public void save(ActionEvent actionEvent) {
         if (editedSong != null) {
             String newTitle = titleTextfield.getText();
             String newArtist = artistTextfield.getText();
@@ -124,6 +137,7 @@ public class NewSongWinController implements Initializable {
             editedSong.setGenre(newGenre);
 
             songTableView.refresh();
+            mySongManager.updateSong(editedSong);
 
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();

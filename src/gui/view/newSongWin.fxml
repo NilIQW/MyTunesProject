@@ -22,7 +22,7 @@
                 <Button fx:id="chooseSong" layoutX="434.0" layoutY="282.0" mnemonicParsing="false" onAction="#chooseSongbtn" style="-fx-background-color: #BAD6FF;" text="Choose..." />
             <ChoiceBox fx:id="genreChoicebox" layoutX="203.0" layoutY="200.0" prefHeight="26.0" prefWidth="221.0" style="-fx-background-color: #BAD6FF;" />
             <Button fx:id="doneBtn" layoutX="356.0" layoutY="340.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#done" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #BAD6FF;" text="Done" />
-            <Button fx:id="saveBtn" layoutX="434.0" layoutY="340.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#Save" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #BAD6FF;" text="Save" />
+            <Button fx:id="saveBtn" layoutX="434.0" layoutY="340.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="26.0" prefWidth="68.0" style="-fx-background-color: #BAD6FF;" text="Save" />
             </children>
         </AnchorPane>
     </children>

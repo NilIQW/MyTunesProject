@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Song {
-    private int id=-1;
+    private int id;
     private String title;
     private String artist;
     private String genre;
@@ -13,6 +13,7 @@ public class Song {
     private List<Playlist> playlists;
 
     public Song(){
+        this.id= -1;
         this.playlists=new ArrayList<>();
     }
 

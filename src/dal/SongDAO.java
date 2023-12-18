@@ -1,4 +1,4 @@
-/*package dal;
+package dal;
 
 import be.Song;
 
@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongDAO implements ISongDAO {
-    private final ConnectionManager connectionManager = new ConnectionManager();
+    private final ConnectionManager connectionManager;
+
+    public SongDAO(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
+    }
 
     public Song getSong(int id) {
         try (Connection con = connectionManager.getConnection()) {
@@ -53,7 +57,7 @@ public class SongDAO implements ISongDAO {
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int generatedId = generatedKeys.getInt(1);
-                    song.setId(generatedId); // Set the generated ID back to the Song object
+                    song.setId(generatedId);
                 } else {
                     throw new SQLException("Adding song failed, no ID obtained.");
                 }
@@ -125,4 +129,4 @@ public class SongDAO implements ISongDAO {
             throw new RuntimeException("Error getting all songs from the database", e);
         }
     }
-}*/
+}

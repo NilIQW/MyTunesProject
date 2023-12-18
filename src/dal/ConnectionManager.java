@@ -10,6 +10,9 @@ import java.sql.SQLException;
 public class ConnectionManager {
     private final SQLServerDataSource dataSource;
 
+
+
+
     public ConnectionManager() {
         dataSource = new SQLServerDataSource();
         dataSource.setServerName("10.176.111.34");
@@ -21,16 +24,8 @@ public class ConnectionManager {
 
     }
 
-    /*public Connection getConnection() throws SQLServerException {
+    public Connection getConnection() throws SQLServerException {
         return dataSource.getConnection();
     }
 
-    public static void main(String[] args) throws SQLException {
-        ConnectionManager databaseConnection = new ConnectionManager();
-        Connection connection = databaseConnection.getConnection();
-        System.out.println("Yaaay!");
-        connection.close();
-
-
-    }*/
 }
