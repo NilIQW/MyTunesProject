@@ -28,7 +28,6 @@ public class NewPlaylistController{
     private Playlist playlistToEdit;
     @FXML
     private ListView<Playlist> playlistView;
-    private Playlist existingPlaylist;
     private boolean playlistUpdated;
     private PlaylistManager myPlaylistManager;
     public NewPlaylistController(){
@@ -68,8 +67,9 @@ public class NewPlaylistController{
                 // Editing an existing playlist
                 playlistToEdit.setName(playlistName);
                 playlistUpdated = true;
+                myPlaylistManager.updatePlaylist(playlistToEdit);
             } else {
-                Playlist newPlaylist = new Playlist(-1, playlistName); // Assuming -1 as a placeholder for the ID
+                Playlist newPlaylist = new Playlist(-1, playlistName);
                 model.createPlaylist(newPlaylist);
                 myPlaylistManager.addPlaylist(newPlaylist);
             }

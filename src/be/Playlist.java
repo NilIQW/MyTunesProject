@@ -46,6 +46,7 @@ public class Playlist {
     }
 
     public void removeSongs(Song song) {
+        songs.remove(song);
         song.removePlaylist(this);
     }
 

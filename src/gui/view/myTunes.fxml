@@ -90,7 +90,7 @@
                                 <Insets left="5.0" right="5.0" top="3.0" />
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="deletePlaylist" mnemonicParsing="false" onAction="#DeletePlaylist" style="-fx-background-color: #BAD6FF;" text="Delete">
+                        <Button fx:id="deletePlaylist" mnemonicParsing="false" onAction="#deletePlaylist" style="-fx-background-color: #BAD6FF;" text="Delete">
                             <HBox.margin>
                                 <Insets left="5.0" top="3.0" />
                             </HBox.margin>

@@ -2,6 +2,7 @@ package be;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Song {
     private int id;
@@ -15,6 +16,9 @@ public class Song {
     public Song(){
         this.id= -1;
         this.playlists=new ArrayList<>();
+    }
+    public Song(int id) {
+        this.id = id;
     }
 
     public Song(String title, String artist, String genre, String filePath, String duration) {
@@ -39,51 +43,33 @@ public class Song {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getArtist() {
         return artist;
     }
-
     public void setArtist(String artist) {
         this.artist = artist;
     }
-
     public String getGenre() {
         return genre;
     }
-
     public void setGenre(String genre) {
         this.genre = genre;
     }
-
     public String getFilePath() {
         return filePath;
     }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
     public String getDuration() {
         return duration;
     }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
     public void addPlaylist(Playlist playlist) {
         playlists.add(playlist);
     }
@@ -92,7 +78,14 @@ public class Song {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Song song = (Song) o;
+        return Objects.equals(title, song.title) && Objects.equals(artist, song.artist);
+    }
+    @Override
     public String toString() {
-        return title;
+        return getTitle();
     }
 }

@@ -2,9 +2,7 @@ package bll;
 
 import be.Playlist;
 import be.Song;
-import dal.ConnectionManager;
-import dal.ISongDAO;
-import dal.SongDAO;
+import dal.*;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -19,9 +17,11 @@ public class MyTunesModel {
     private final ObservableList<Song> songs;
     private final ObservableList<Playlist> playlists;
     private final ObservableList<Song> songsOnPlaylist;
-    private final ListProperty<Playlist> playlistsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final ListProperty<Playlist> playlistsProperty;
     private final Connection connection;
     private final ISongDAO songDAO= new SongDAO(new ConnectionManager());
+    private final IPlaylistDAO playlistDAO = new PlaylistDAO(new ConnectionManager());
+    private PlaylistManager myPlaylistManager;
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
@@ -33,11 +33,29 @@ public class MyTunesModel {
         this.connection = connection;
         songs = FXCollections.observableArrayList();
         playlists = FXCollections.observableArrayList();
+        playlistsProperty = new SimpleListProperty<>(playlists);
         songsOnPlaylist = FXCollections.observableArrayList();
+        myPlaylistManager = new PlaylistManager(new PlaylistDAO(new ConnectionManager()));
 
         loadSongsFromDatabase();
+        loadPlaylistsFromDatabase();
     }
+    private void loadPlaylistsFromDatabase() {
+        try {
+            List<Playlist> playlistsFromDatabase = playlistDAO.getAllPlaylists();
 
+            // Clear the existing playlists and addAll from the database
+            playlists.clear();
+            playlists.addAll(playlistsFromDatabase);
+
+            // Update the property, triggering any listeners
+            playlistsProperty.set(FXCollections.observableArrayList(playlists));
+
+        } catch (Exception e) {
+            // Handle exceptions appropriately
+            e.printStackTrace();
+        }
+    }
     private final ListProperty<Song> songsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     public ListProperty<Song> songsProperty() {
@@ -49,15 +67,11 @@ public class MyTunesModel {
             List<Song> songsFromDatabase = songDAO.getAllSongs();
             songs.addAll(songsFromDatabase);
 
-            // Update the property, triggering any listeners
             songsProperty.set(FXCollections.observableArrayList(songs));
         } catch (Exception e) {
-            // Handle exceptions appropriately
             e.printStackTrace();
         }
     }
-
-
 
     public ObservableList<Song> getSongs(){
         return songs;
@@ -70,9 +84,11 @@ public class MyTunesModel {
 
     }
     public void createPlaylist(Playlist newPlaylist) {
-        playlists.add(newPlaylist);
-        playlistsProperty.set(FXCollections.observableArrayList(playlists));
+        playlistsProperty.add(newPlaylist);
+
+        myPlaylistManager.addPlaylist(newPlaylist);
     }
+
     public ObservableList<Playlist> getPlaylists() {
         return playlists;
     }
@@ -81,11 +97,16 @@ public class MyTunesModel {
     }
 
     public void removePlaylist(Playlist selectedPlaylist) {
-        playlists.remove(selectedPlaylist);
+        playlistsProperty.remove(selectedPlaylist);
     }
+
 
     public ObservableList<Song> getPlaylistSongs() {
         return songsOnPlaylist;
+    }
+
+    public void addSongToPlaylist(Playlist playlist, Song song) {
+        playlist.addSongs(song);
     }
 
 

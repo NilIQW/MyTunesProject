@@ -62,7 +62,6 @@ public class NewSongWinController implements Initializable {
         this.editedSong = editedSong;
 
     }
-
     public void chooseSongbtn(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose songs");
@@ -76,8 +75,6 @@ public class NewSongWinController implements Initializable {
             stage.close();
         }
     }
-
-
     private void loadSongs(List<File> songFiles) {
         if (model != null && mySongManager != null) {
             for (File file : songFiles) {
@@ -91,10 +88,7 @@ public class NewSongWinController implements Initializable {
                     Song newSong = new Song(file.getName(), artistTextfield.getText(), genreChoicebox.getValue(), filePath, duration);
                     model.addSongs(newSong);
                     mySongManager.addSong(newSong);
-
-
                     songTableView.setItems(model.getSongs());
-
 
                     mediaPlayer.setOnEndOfMedia(() -> {
                         mediaPlayer.stop();

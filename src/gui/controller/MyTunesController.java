@@ -3,9 +3,11 @@ package gui.controller;
 import be.Playlist;
 import be.Song;
 import bll.MyTunesModel;
+import bll.PlaylistManager;
 import bll.SongManager;
 import dal.ConnectionManager;
 import dal.ISongDAO;
+import dal.PlaylistDAO;
 import dal.SongDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +28,7 @@ import javafx.stage.StageStyle;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -59,15 +62,18 @@ public class MyTunesController implements Initializable {
     private MediaPlayer mediaPlayer;
     private ObservableList<Song> filteredSongs;
     private SongManager mySongManager;
+    private PlaylistManager myPlaylistManager;
     public MyTunesController(){
         this.mySongManager = new SongManager(new SongDAO(new ConnectionManager()) {
         });
+        this.myPlaylistManager = new PlaylistManager(new PlaylistDAO(new ConnectionManager()));
     }
     public void setModel(MyTunesModel model) {
         this.model = model;
         playlistView.setItems(model.playlistsProperty());
         playlistSongsView.setItems(model.getPlaylistSongs());
         songTableView.itemsProperty().bind(model.songsProperty());
+
     }
 
     public void setSongManager(SongManager mySongManager) {
@@ -163,8 +169,6 @@ public class MyTunesController implements Initializable {
             e.printStackTrace();
         }
     }
-
-
     @FXML
     public void editBtn(ActionEvent actionEvent) {
         try {
@@ -175,7 +179,6 @@ public class MyTunesController implements Initializable {
             newSongWinController.setMySongManager(mySongManager);
             newSongWinController.setMyTunesModel(model);
             newSongWinController.setSongTableView(songTableView);
-
 
             Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
             newSongWinController.setEditedSong(selectedSong);
@@ -210,11 +213,8 @@ public class MyTunesController implements Initializable {
             model.setMediaPlayer(mediaPlayer);
 
             titleColumn.setText(selectedSong.getTitle());
-
             titleLabel.setText(selectedSong.getTitle());
-
             mediaPlayer.play();
-
         }
     }
     private void stopCurrentPlayback() {
@@ -239,19 +239,25 @@ public class MyTunesController implements Initializable {
         initializeSongTable();
         filteredSongs = FXCollections.observableArrayList();
 
-        playlistView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            updatePlaylistSongsView(newVal);
-        });
-
-
         volumeSlider.setValue(50); // Set an initial volume value
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             adjustVolume(newValue.doubleValue() / 100.0); // Convert to a value between 0 and 1
         });
-
+        playlistView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            // Update the playlistSongsView based on the selected playlist
+            updatePlaylistSongsView();
+        });
     }
-
-
+    public void updatePlaylistSongsView() {
+        Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
+        if (selectedPlaylist != null) {
+            List<Song> songsInPlaylist = selectedPlaylist.getSongs();
+            playlistSongsView.setItems(FXCollections.observableArrayList(songsInPlaylist));
+        } else {
+            // Clear the playlistSongsView if no playlist is selected
+            playlistSongsView.setItems(FXCollections.emptyObservableList());
+        }
+    }
 
     private void adjustVolume(double volume) {
         if (mediaPlayer != null) {
@@ -262,18 +268,19 @@ public class MyTunesController implements Initializable {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
     }
-
     public void deleteSong(ActionEvent actionEvent) {
         ObservableList<Song> selectedSongs = songTableView.getSelectionModel().getSelectedItems();
+
         if (!selectedSongs.isEmpty()) {
             for (Song song : selectedSongs) {
                 mySongManager.deleteSong(song.getId());
                 model.removeSongs(selectedSongs);
             }
+            // Use setAll to update the items of the TableView
+            songTableView.getItems().setAll(model.getSongs());
         }
-        songTableView.setItems(model.getSongs());
     }
-    public void DeletePlaylist(ActionEvent actionEvent) {
+    public void deletePlaylist(ActionEvent actionEvent) {
         Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
         if (selectedPlaylist != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -288,6 +295,7 @@ public class MyTunesController implements Initializable {
                 if (response == ButtonType.OK) {
 
                     model.removePlaylist(selectedPlaylist);
+                    myPlaylistManager.deletePlaylist(selectedPlaylist.getId());
 
                     playlistView.getItems().clear();
                     playlistView.getItems().addAll(model.getPlaylists());
@@ -300,12 +308,13 @@ public class MyTunesController implements Initializable {
         Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
 
         if (selectedPlaylist != null && selectedSong != null) {
-            selectedPlaylist.addSongs(selectedSong);
+            // Add the selected song to the playlist
+            model.addSongToPlaylist(selectedPlaylist, selectedSong);
+
+            // Update the playlistSongsView with the updated list of songs
+            List<Song> songsInPlaylist = selectedPlaylist.getSongs();
+            playlistSongsView.getItems().setAll(songsInPlaylist);
         }
-        List<Song> songsInPlaylist = selectedPlaylist.getSongs();
-
-        playlistSongsView.setItems(FXCollections.observableArrayList(songsInPlaylist));
-
     }
     public void filterButton(ActionEvent actionEvent) {
         String searchTerm = filterTextfield.getText().trim().toLowerCase();
@@ -317,10 +326,8 @@ public class MyTunesController implements Initializable {
                             song.getArtist().toLowerCase().contains(searchTerm)
             );
             songTableView.setItems(filteredSongs);
-
         }
     }
-
     public void DeletePSong(ActionEvent actionEvent) {
         Playlist selectedPlaylist = playlistView.getSelectionModel().getSelectedItem();
         Song selectedSong = playlistSongsView.getSelectionModel().getSelectedItem();
@@ -328,6 +335,7 @@ public class MyTunesController implements Initializable {
         if (selectedPlaylist != null && selectedSong != null) {
             // Remove the selected song from the playlist
             selectedPlaylist.removeSong(selectedSong);
+            mySongManager.deleteSong(selectedSong.getId());
 
             // Update the playlistSongsView with the updated list of songs
             playlistSongsView.setItems(FXCollections.observableArrayList(selectedPlaylist.getSongs()));
@@ -384,23 +392,13 @@ public class MyTunesController implements Initializable {
         int selectedIndex = songsInPlaylist.indexOf(selectedSong);
 
         if (selectedIndex < songsInPlaylist.size() - 1) {
-            // Swap the selected song with the one below it
             Song belowSong = songsInPlaylist.get(selectedIndex + 1);
             songsInPlaylist.set(selectedIndex + 1, selectedSong);
             songsInPlaylist.set(selectedIndex, belowSong);
 
-            // Select the moved song in the playlistSongsView
             playlistSongsView.getSelectionModel().select(selectedIndex + 1);
         }
-    }
-    public void updatePlaylistSongsView(Playlist selectedPlaylist) {//this code is to show the songs inside the selected playlist
-        if (selectedPlaylist != null) {
-            List<Song> songsInPlaylist = selectedPlaylist.getSongs();
-            playlistSongsView.setItems(FXCollections.observableArrayList(songsInPlaylist));
-        } else {
-            // Clear the playlistSongsView if no playlist is selected
-            playlistSongsView.getItems().clear();
-        }
-    }
 
+
+    }
 }

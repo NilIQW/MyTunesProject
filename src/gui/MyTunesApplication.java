@@ -37,30 +37,7 @@ public class MyTunesApplication extends Application {
         ISongDAO songDAO = new SongDAO(connectionManager);
 
         SongManager songManager = new SongManager(songDAO);
-
         myTunesController.setSongManager(songManager);
-
-
-        manageSongs(songManager);
-    }
-
-    private void manageSongs(SongManager songManager) {
-        // Retrieve all songs from the database
-        List<Song> allSongs = songManager.getAllSongs();
-
-        // For demonstration purposes, let's update the first song in the list
-        if (!allSongs.isEmpty()) {
-            Song firstSong = allSongs.get(0);
-            firstSong.setTitle("Updated Song Title");
-
-            // Update the song in the database
-            songManager.updateSong(firstSong);
-
-            // Print the updated song details
-            System.out.println("Updated Song: " + firstSong);
-        } else {
-            System.out.println("No songs found in the database.");
-        }
     }
 
     public static void main(String[] args) {

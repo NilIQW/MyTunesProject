@@ -35,7 +35,6 @@ public class SongDAO implements ISongDAO {
             throw new RuntimeException("Error getting song from the database", e);
         }
     }
-
     public void addSong(Song song) {
         String sql = "INSERT INTO Songs (title, artist, genre, filePath, duration) VALUES (?, ?, ?, ?, ?)";
 

@@ -1,14 +1,20 @@
 package bll;
 
 import be.Playlist;
+import be.Song;
 import dal.IPlaylistDAO;
+import dal.ISongDAO;
 import dal.PlaylistDAO;
+import dal.SongDAO;
 
+import java.util.Collections;
 import java.util.List;
 
 public class PlaylistManager {
-    private final IPlaylistDAO playlistDAO;
-
+    private IPlaylistDAO playlistDAO;
+    public void setPlaylistDAO(IPlaylistDAO playlistDAO) {
+        this.playlistDAO = playlistDAO;
+    }
     public PlaylistManager(IPlaylistDAO playlistDAO) {
         this.playlistDAO = playlistDAO;
     }
@@ -21,7 +27,5 @@ public class PlaylistManager {
     public void deletePlaylist(int id){
         playlistDAO.deletePlaylist(id);
     }
-    public List<Playlist> getAllPlaylist(){
-        return playlistDAO.getAllPlaylists();
-    }
+
 }
