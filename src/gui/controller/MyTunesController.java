@@ -60,7 +60,6 @@ public class MyTunesController implements Initializable {
     private ObservableList<Song> filteredSongs;
     private SongManager mySongManager;
     public MyTunesController(){
-
         this.mySongManager = new SongManager(new SongDAO(new ConnectionManager()) {
         });
     }

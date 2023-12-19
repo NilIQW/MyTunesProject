@@ -69,8 +69,7 @@ public class MyTunesModel {
         songs.removeAll(songsToRemove);
 
     }
-    public void createPlaylist(String playlistName) {
-        Playlist newPlaylist = new Playlist(playlistName);
+    public void createPlaylist(Playlist newPlaylist) {
         playlists.add(newPlaylist);
         playlistsProperty.set(FXCollections.observableArrayList(playlists));
     }

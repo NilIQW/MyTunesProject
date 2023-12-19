@@ -5,12 +5,27 @@ import java.util.List;
 import java.util.Objects;
 
 public class Playlist {
+    private int id;
     private String name;
     private List<Song> songs;
 
-    public Playlist(String name) {
+    public Playlist(int id, String name) {
+        this.id=id;
         this.name = name;
         this.songs = new ArrayList<>();
+    }
+    public Playlist(String name) {
+        this.id = -1; //
+        this.name = name;
+        this.songs = new ArrayList<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setName(String newName) {

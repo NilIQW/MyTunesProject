@@ -2,6 +2,10 @@ package gui.controller;
 
 import be.Playlist;
 import bll.MyTunesModel;
+import bll.PlaylistManager;
+import dal.ConnectionManager;
+import dal.IPlaylistDAO;
+import dal.PlaylistDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +30,11 @@ public class NewPlaylistController{
     private ListView<Playlist> playlistView;
     private Playlist existingPlaylist;
     private boolean playlistUpdated;
+    private PlaylistManager myPlaylistManager;
+    public NewPlaylistController(){
+        this.myPlaylistManager= new PlaylistManager(new PlaylistDAO(new ConnectionManager()));
+    }
+
 
     public void setPlaylistToEdit(Playlist playlistToEdit) {
         this.playlistToEdit = playlistToEdit;
@@ -37,7 +46,6 @@ public class NewPlaylistController{
     public boolean isPlaylistUpdated(){
         return playlistUpdated;
     }
-
 
     public void setModel(MyTunesModel model) {
         this.model = model;
@@ -61,8 +69,9 @@ public class NewPlaylistController{
                 playlistToEdit.setName(playlistName);
                 playlistUpdated = true;
             } else {
-                // Creating a new playlist
-                model.createPlaylist(playlistName);
+                Playlist newPlaylist = new Playlist(-1, playlistName); // Assuming -1 as a placeholder for the ID
+                model.createPlaylist(newPlaylist);
+                myPlaylistManager.addPlaylist(newPlaylist);
             }
         }
 
