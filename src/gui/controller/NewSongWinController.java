@@ -88,7 +88,7 @@ public class NewSongWinController implements Initializable {
                     Song newSong = new Song(file.getName(), artistTextfield.getText(), genreChoicebox.getValue(), filePath, duration);
                     model.addSongs(newSong);
                     mySongManager.addSong(newSong);
-                    songTableView.setItems(model.getSongs());
+                    songTableView.getItems().addAll(model.getSongs());
 
                     mediaPlayer.setOnEndOfMedia(() -> {
                         mediaPlayer.stop();

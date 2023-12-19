@@ -76,6 +76,9 @@ public class MyTunesController implements Initializable {
 
     }
 
+
+
+
     public void setSongManager(SongManager mySongManager) {
         this.mySongManager = mySongManager;
     }

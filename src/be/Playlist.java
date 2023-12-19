@@ -62,12 +62,6 @@ public class Playlist {
         Playlist playlist = (Playlist) o;
         return Objects.equals(name, playlist.name);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
     public void removeSong(Song song) {
         songs.remove(song);
 
