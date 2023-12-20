@@ -75,10 +75,6 @@ public class MyTunesController implements Initializable {
         songTableView.itemsProperty().bind(model.songsProperty());
 
     }
-
-
-
-
     public void setSongManager(SongManager mySongManager) {
         this.mySongManager = mySongManager;
     }
@@ -89,7 +85,6 @@ public class MyTunesController implements Initializable {
     public TableView<Song> getSongTableView() {
         return songTableView;
     }
-
     private void setupTableColumns() {
         idColumn = new TableColumn<>("ID");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -205,7 +200,15 @@ public class MyTunesController implements Initializable {
         playSelectedSong();
     }
     public void playSelectedSong() {
-       Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
+        Song selectedSong = null;
+        // Check if a song is selected in the playlistSongsView
+        if (!playlistSongsView.getSelectionModel().getSelectedItems().isEmpty()) {
+            selectedSong = playlistSongsView.getSelectionModel().getSelectedItem();
+        }
+        // If no song is selected in the playlistSongsView, check the songTableView
+        else if (!songTableView.getSelectionModel().getSelectedItems().isEmpty()) {
+            selectedSong = songTableView.getSelectionModel().getSelectedItem();
+        }
         if (selectedSong != null && selectedSong.getFilePath() != null && !selectedSong.getFilePath().isEmpty()) {
             String filePath = selectedSong.getFilePath();
             Media media = new Media(new File(filePath).toURI().toString());
@@ -238,7 +241,6 @@ public class MyTunesController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setupTableColumns();
         initializeSongTable();
         filteredSongs = FXCollections.observableArrayList();
 
