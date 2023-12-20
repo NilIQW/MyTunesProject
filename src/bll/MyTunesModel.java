@@ -56,6 +56,7 @@ public class MyTunesModel {
             e.printStackTrace();
         }
     }
+
     private final ListProperty<Song> songsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     public ListProperty<Song> songsProperty() {

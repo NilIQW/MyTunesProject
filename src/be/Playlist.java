@@ -62,6 +62,8 @@ public class Playlist {
         Playlist playlist = (Playlist) o;
         return Objects.equals(name, playlist.name);
     }
+
+
     public void removeSong(Song song) {
         songs.remove(song);
 

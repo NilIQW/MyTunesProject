@@ -24,6 +24,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,8 @@ import java.util.ResourceBundle;
 
 
 public class MyTunesController implements Initializable {
+    @FXML
+    private ProgressBar progressBar;
     @FXML
     private ListView<Song> playlistSongsView;
     @FXML
@@ -85,25 +88,6 @@ public class MyTunesController implements Initializable {
     public TableView<Song> getSongTableView() {
         return songTableView;
     }
-    private void setupTableColumns() {
-        idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        titleColumn = new TableColumn<>("Title");
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-
-        artistColumn = new TableColumn<>("Artist");
-        artistColumn.setCellValueFactory(new PropertyValueFactory<>("artist"));
-
-        genreColumn = new TableColumn<>("Genre");
-        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
-
-        durationColumn = new TableColumn<>("Duration");
-        durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
-
-        songTableView.getColumns().addAll(idColumn, titleColumn, artistColumn, genreColumn, durationColumn);
-    }
-
     public void newPlaylist(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newPlaylist.fxml"));
         Parent root = loader.load();
@@ -218,16 +202,28 @@ public class MyTunesController implements Initializable {
             mediaPlayer = new MediaPlayer(media);
             model.setMediaPlayer(mediaPlayer);
 
-            titleColumn.setText(selectedSong.getTitle());
             titleLabel.setText(selectedSong.getTitle());
+
+            mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+                Duration currentTime = mediaPlayer.getCurrentTime();
+                Duration totalDuration = media.getDuration();
+
+                // Calculate progress as a value between 0 and 1
+                double progress = currentTime.toMillis() / totalDuration.toMillis();
+
+                // Update the progress bar
+                progressBar.setProgress(progress);
+            });
             mediaPlayer.play();
         }
     }
     private void stopCurrentPlayback() {
         if (mediaPlayer != null) {
+            progressBar.progressProperty().unbind();
             mediaPlayer.stop();
         }
     }
+
     public void pauseBtn(ActionEvent actionEvent) {
         MediaPlayer mediaPlayer = model.getMediaPlayer();
         if (mediaPlayer != null) {
